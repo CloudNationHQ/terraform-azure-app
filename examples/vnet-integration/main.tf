@@ -63,7 +63,7 @@ module "appservice" {
 }
 
 module "webapp" {
-  source  = "cloudnationhq/web/azure"
+  source  = "cloudnationhq/app/azure"
   version = "~> 1.0"
 
   resource_group = module.rg.groups.demo.name
