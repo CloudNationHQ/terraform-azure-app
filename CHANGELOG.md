@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/CloudNationHQ/terraform-azure-app/compare/v1.1.0...v1.1.1) (2024-08-16)
+
+
+### Bug Fixes
+
+* fix module references ([#4](https://github.com/CloudNationHQ/terraform-azure-app/issues/4)) ([693e299](https://github.com/CloudNationHQ/terraform-azure-app/commit/693e299d519b3599f5170fcf9e25db5c7c0ba25f))
+
 ## [1.1.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v1.0.0...v1.1.0) (2024-08-16)
 
 
