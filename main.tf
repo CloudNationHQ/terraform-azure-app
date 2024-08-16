@@ -21,7 +21,7 @@ resource "azurerm_linux_web_app" "linux" {
   virtual_network_subnet_id                      = try(var.instance.virtual_network_subnet_id, null)
   webdeploy_publish_basic_authentication_enabled = try(var.instance.webdeploy_publish_basic_authentication_enabled, true)
   zip_deploy_file                                = try(var.instance.zip_deploy_file, null)
-  tags                                           = try(var.instance.tags, {})
+  tags                                           = try(var.instance.tags, var.tags, {})
 
   # block
   site_config {
@@ -519,7 +519,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
   virtual_network_subnet_id                      = try(var.instance.virtual_network_subnet_id, null)
   webdeploy_publish_basic_authentication_enabled = try(var.instance.webdeploy_publish_basic_authentication_enabled, true)
   zip_deploy_file                                = try(var.instance.zip_deploy_file, null)
-  tags                                           = try(var.instance.tags, {})
+  tags                                           = try(var.instance.tags, var.tags, {})
 
   site_config {
     always_on                                     = try(var.instance.site_config.always_on, true)
@@ -1009,7 +1009,7 @@ resource "azurerm_windows_web_app" "windows" {
   virtual_network_subnet_id                      = try(var.instance.virtual_network_subnet_id, null)
   webdeploy_publish_basic_authentication_enabled = try(var.instance.webdeploy_publish_basic_authentication_enabled, true)
   zip_deploy_file                                = try(var.instance.zip_deploy_file, null)
-  tags                                           = try(var.instance.tags, {})
+  tags                                           = try(var.instance.tags, var.tags, {})
 
   # block
   site_config {
@@ -1509,7 +1509,7 @@ resource "azurerm_windows_web_app_slot" "windows" {
   virtual_network_subnet_id                      = try(var.instance.virtual_network_subnet_id, null)
   webdeploy_publish_basic_authentication_enabled = try(var.instance.webdeploy_publish_basic_authentication_enabled, true)
   zip_deploy_file                                = try(var.instance.zip_deploy_file, null)
-  tags                                           = try(var.instance.tags, {})
+  tags                                           = try(var.instance.tags, var.tags, {})
 
   site_config {
     always_on                                     = try(var.instance.site_config.always_on, true)
@@ -1986,5 +1986,5 @@ resource "azurerm_user_assigned_identity" "identity" {
   name                = try(each.value.name, "uai-${var.instance.name}")
   resource_group_name = coalesce(lookup(var.instance, "resource_group", null), var.resource_group)
   location            = coalesce(lookup(var.instance, "location", null), var.location)
-  tags                = try(var.instance.tags, {})
+  tags                = try(var.instance.tags, var.tags, {})
 }

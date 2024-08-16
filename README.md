@@ -52,15 +52,16 @@ End-to-end testing is not conducted on these modules, as they are individual com
 | [azurerm_windows_web_app](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resourceswindows_web_app) | resource |
 | [azurerm_linux_web_app](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_web_app_slot) | resource |
 | [azurerm_windows_web_app_slot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
+| [azurerm_user_assigned_identity](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Required |
 | :-- | :-- | :-- | :-- |
 | `instance` | describes webapp related configuration | object | yes |
-| `naming` | contains naming convention  | string | yes |
 | `location` | default azure region to be used  | string | yes |
 | `resource_group` | default resource group to be used | string | yes |
+| `tags` | tags to be added to the resources | map(string) | no |
 
 ## Outputs
 
@@ -92,17 +93,17 @@ Full examples detailing all usages, along with integrations with dependency modu
 
 ## Authors
 
-Module is maintained by [these awesome contributors](https://github.com/cloudnationhq/terraform-azure-web/graphs/contributors).
+Module is maintained by [these awesome contributors](https://github.com/cloudnationhq/terraform-azure-app/graphs/contributors).
 
 ## Contributing
 
 We welcome contributions from the community! Whether it's reporting a bug, suggesting a new feature, or submitting a pull request, your input is highly valued.
 
-For more information, please see our contribution [guidelines](https://github.com/CloudNationHQ/terraform-azure-web/blob/main/CONTRIBUTING.md).
+For more information, please see our contribution [guidelines](https://github.com/CloudNationHQ/terraform-azure-app/blob/main/CONTRIBUTING.md).
 
 ## License
 
-MIT Licensed. See [LICENSE](https://github.com/cloudnationhq/terraform-azure-web/blob/main/LICENSE) for full details.
+MIT Licensed. See [LICENSE](https://github.com/cloudnationhq/terraform-azure-app/blob/main/LICENSE) for full details.
 
 ## References
 

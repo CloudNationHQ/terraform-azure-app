@@ -35,7 +35,7 @@ module "appservice" {
 
 module "webapp" {
   source  = "cloudnationhq/web/azure"
-  version = "~> 0.1"
+  version = "~> 1.0"
 
   resource_group = module.rg.groups.demo.name
   location       = module.rg.groups.demo.location
