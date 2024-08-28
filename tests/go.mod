@@ -1,6 +1,6 @@
-module github.com/cloudnationhq/terraform-azure-web
+module github.com/cloudnationhq/terraform-azure-app
 
-go 1.20
+go 1.23.0
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.7.0

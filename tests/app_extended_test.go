@@ -7,7 +7,7 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/keyvault/armkeyvault"
-	"github.com/cloudnationhq/terraform-azure-web/shared"
+	"github.com/cloudnationhq/terraform-azure-app/shared"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/require"
 )
@@ -19,7 +19,7 @@ type VaultDetails struct {
 
 type ClientSetup struct {
 	SubscriptionID string
-	VaultClient *armkeyvault.VaultsClient
+	VaultClient    *armkeyvault.VaultsClient
 }
 
 func (details *VaultDetails) GetVault(t *testing.T, client *armkeyvault.VaultsClient) *armkeyvault.Vault {
