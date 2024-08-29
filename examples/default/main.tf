@@ -42,7 +42,7 @@ module "webapp" {
 
   instance = {
     type            = "linux"
-    name            = "app-demo-dev-xaeso"
+    name            = "app-demo-dev-xaeso-001"
     service_plan_id = module.appservice.plans.web.id
     site_config     = {}
   }
