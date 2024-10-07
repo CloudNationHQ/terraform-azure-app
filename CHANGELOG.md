@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v1.1.1...v1.2.0) (2024-10-07)
+
+
+### Features
+
+* **deps:** bump github.com/gruntwork-io/terratest in /tests ([#10](https://github.com/CloudNationHQ/terraform-azure-app/issues/10)) ([74f50de](https://github.com/CloudNationHQ/terraform-azure-app/commit/74f50dee485ecb7908119fee9fc4a3345df48a75))
+
+
+### Bug Fixes
+
+* sanitize go testing ([#8](https://github.com/CloudNationHQ/terraform-azure-app/issues/8)) ([f508150](https://github.com/CloudNationHQ/terraform-azure-app/commit/f508150220264f323bffcb43d1f00c4a9a51741a))
+
 ## [1.1.1](https://github.com/CloudNationHQ/terraform-azure-app/compare/v1.1.0...v1.1.1) (2024-08-16)
 
 
