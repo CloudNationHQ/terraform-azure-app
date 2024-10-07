@@ -7,19 +7,19 @@ module "naming" {
 
 module "rg" {
   source  = "cloudnationhq/rg/azure"
-  version = "~> 0.1"
+  version = "~> 2.0"
 
   groups = {
     demo = {
-      name   = module.naming.resource_group.name
-      region = "westeurope"
+      name     = module.naming.resource_group.name
+      location = "westeurope"
     }
   }
 }
 
 module "network" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   naming = local.naming
 
@@ -52,9 +52,9 @@ module "network" {
 
 module "private_dns" {
   source  = "cloudnationhq/pdns/azure"
-  version = "~> 0.1"
+  version = "~> 2.0"
 
-  resourcegroup = module.rg.groups.demo.name
+  resource_group = module.rg.groups.demo.name
 
   zones = {
     web = {
@@ -71,10 +71,10 @@ module "private_dns" {
 
 module "privatelink" {
   source  = "cloudnationhq/pe/azure"
-  version = "~> 0.1"
+  version = "~> 1.0"
 
-  resourcegroup = module.rg.groups.demo.name
-  location      = module.rg.groups.demo.location
+  resource_group = module.rg.groups.demo.name
+  location       = module.rg.groups.demo.location
 
   endpoints = {
     webapp = {
@@ -89,7 +89,7 @@ module "privatelink" {
 
 module "serviceplan" {
   source  = "cloudnationhq/plan/azure"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   resource_group = module.rg.groups.demo.name
   location       = module.rg.groups.demo.location
@@ -105,7 +105,7 @@ module "serviceplan" {
 
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   resource_group = module.rg.groups.demo.name
   location       = module.rg.groups.demo.location
