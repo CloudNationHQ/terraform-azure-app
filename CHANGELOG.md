@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v2.0.0...v2.1.0) (2024-10-11)
+
+
+### Features
+
+* auto generated docs and refine makefile ([#15](https://github.com/CloudNationHQ/terraform-azure-app/issues/15)) ([89acc4f](https://github.com/CloudNationHQ/terraform-azure-app/commit/89acc4f8e4834c2a503d781ca266419ab775f729))
+
 ## [2.0.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v1.2.0...v2.0.0) (2024-10-07)
 
 
