@@ -8,7 +8,7 @@ resource "azurerm_linux_web_app" "linux" {
   location                                       = coalesce(lookup(var.instance, "location", null), var.location)
   resource_group_name                            = coalesce(lookup(var.instance, "resource_group", null), var.resource_group)
   service_plan_id                                = var.instance.service_plan_id
-  app_settings                                   = {}
+  app_settings                                   = try(var.instance.app_settings, {})
   client_affinity_enabled                        = try(var.instance.client_affinity_enabled, null)
   client_certificate_enabled                     = try(var.instance.client_certificate_enabled, null)
   client_certificate_mode                        = try(var.instance.client_certificate_mode, "Required")
@@ -505,7 +505,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
 
   name                                           = try(each.value.name, each.key)
   app_service_id                                 = azurerm_linux_web_app.linux[var.instance.name].id
-  app_settings                                   = {}
+  app_settings                                   = try(var.instance.app_settings, {})
   client_affinity_enabled                        = try(var.instance.client_affinity_enabled, null)
   client_certificate_enabled                     = try(var.instance.client_certificate_enabled, null)
   client_certificate_mode                        = try(var.instance.client_certificate_mode, "Required")
@@ -994,7 +994,7 @@ resource "azurerm_windows_web_app" "windows" {
   location                                       = coalesce(lookup(var.instance, "location", null), var.location)
   resource_group_name                            = coalesce(lookup(var.instance, "resource_group", null), var.resource_group)
   service_plan_id                                = var.instance.service_plan_id
-  app_settings                                   = {}
+  app_settings                                   = try(var.instance.app_settings, {})
   client_affinity_enabled                        = try(var.instance.client_affinity_enabled, null)
   client_certificate_enabled                     = try(var.instance.client_certificate_enabled, null)
   client_certificate_mode                        = try(var.instance.client_certificate_mode, "Required")
@@ -1491,7 +1491,7 @@ resource "azurerm_windows_web_app_slot" "windows" {
 
   name                                           = try(each.value.name, each.key)
   app_service_id                                 = azurerm_windows_web_app.windows[var.instance.name].id
-  app_settings                                   = {}
+  app_settings                                   = try(var.instance.app_settings, {})
   client_affinity_enabled                        = try(var.instance.client_affinity_enabled, null)
   client_certificate_enabled                     = try(var.instance.client_certificate_enabled, null)
   client_certificate_mode                        = try(var.instance.client_certificate_mode, "Required")
