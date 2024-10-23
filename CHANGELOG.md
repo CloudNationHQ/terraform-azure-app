@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v2.1.0...v2.2.0) (2024-10-23)
+
+
+### Features
+
+* add the ability to pass app settings to the app service ([#18](https://github.com/CloudNationHQ/terraform-azure-app/issues/18)) ([0f7e9b7](https://github.com/CloudNationHQ/terraform-azure-app/commit/0f7e9b781c3a4e06073d270060d04c6bf25ae94d))
+
 ## [2.1.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v2.0.0...v2.1.0) (2024-10-11)
 
 
