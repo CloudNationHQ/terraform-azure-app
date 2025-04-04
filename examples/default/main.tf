@@ -1,6 +1,6 @@
 module "naming" {
   source  = "cloudnationhq/naming/azure"
-  version = "~> 0.1"
+  version = "~> 0.24"
 
   suffix = ["demo", "dev"]
 }
@@ -35,14 +35,14 @@ module "appservice" {
 
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   resource_group = module.rg.groups.demo.name
   location       = module.rg.groups.demo.location
 
   instance = {
     type            = "linux"
-    name            = "app-demo-dev-xaeso-001"
+    name            = "app-demo-dev-xaese"
     service_plan_id = module.appservice.plans.web.id
     site_config     = {}
   }

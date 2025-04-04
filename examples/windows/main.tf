@@ -1,6 +1,6 @@
 module "naming" {
   source  = "cloudnationhq/naming/azure"
-  version = "~> 0.1"
+  version = "~> 0.24"
 
   suffix = ["demo", "dev"]
 }
@@ -35,19 +35,18 @@ module "appservice" {
 
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   resource_group = module.rg.groups.demo.name
   location       = module.rg.groups.demo.location
 
   instance = {
     type            = "windows"
-    name            = "app-demo-dev-xaeso"
+    name            = "app-demo-dev-xaesy"
     service_plan_id = module.appservice.plans.web.id
     site_config = {
       http2_enabled = true
       application_stack = {
-        dotnet_version = "v6.0"
       }
     }
   }
