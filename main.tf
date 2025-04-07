@@ -30,6 +30,7 @@ resource "azurerm_linux_web_app" "linux" {
   virtual_network_subnet_id                      = var.instance.virtual_network_subnet_id
   webdeploy_publish_basic_authentication_enabled = var.instance.webdeploy_publish_basic_authentication_enabled
   zip_deploy_file                                = var.instance.zip_deploy_file
+  virtual_network_backup_restore_enabled         = var.instance.virtual_network_backup_restore_enabled
 
   tags = try(
     var.instance.tags, var.tags, null
@@ -59,6 +60,8 @@ resource "azurerm_linux_web_app" "linux" {
     vnet_route_all_enabled                        = var.instance.site_config.vnet_route_all_enabled
     websockets_enabled                            = var.instance.site_config.websockets_enabled
     worker_count                                  = var.instance.site_config.worker_count
+    scm_minimum_tls_version                       = var.instance.site_config.scm_minimum_tls_version
+    remote_debugging_version                      = var.instance.site_config.remote_debugging_version
 
     dynamic "application_stack" {
       for_each = lookup(each.value.site_config, "application_stack", null) != null ? [lookup(each.value.site_config, "application_stack")] : []
@@ -349,6 +352,7 @@ resource "azurerm_linux_web_app" "linux" {
           allowed_audiences                    = active_directory_v2.value.allowed_audiences
           allowed_groups                       = active_directory_v2.value.allowed_groups
           allowed_identities                   = active_directory_v2.value.allowed_identities
+          login_parameters                     = active_directory_v2.value.login_parameters
         }
       }
 
@@ -549,58 +553,60 @@ resource "azurerm_linux_web_app" "linux" {
 
 # linux web app slot
 resource "azurerm_linux_web_app_slot" "linux" {
-  for_each = {
-    for key, value in try(var.instance.slots, {}) : key => value
-    if var.instance.type == "linux"
-  }
+  for_each = var.instance.type == "linux" ? (var.instance.slots != null ? var.instance.slots : {}) : {}
 
   name = try(
     each.value.name, each.key
   )
 
   app_service_id                                 = azurerm_linux_web_app.linux[var.instance.name].id
-  app_settings                                   = var.instance.app_settings
-  client_affinity_enabled                        = var.instance.client_affinity_enabled
-  client_certificate_enabled                     = var.instance.client_certificate_enabled
-  client_certificate_mode                        = var.instance.client_certificate_mode
-  client_certificate_exclusion_paths             = var.instance.client_certificate_exclusion_paths
-  enabled                                        = var.instance.enabled
-  ftp_publish_basic_authentication_enabled       = var.instance.ftp_publish_basic_authentication_enabled
-  https_only                                     = var.instance.https_only
-  public_network_access_enabled                  = var.instance.public_network_access_enabled
-  key_vault_reference_identity_id                = var.instance.key_vault_reference_identity_id
-  virtual_network_subnet_id                      = var.instance.virtual_network_subnet_id
-  webdeploy_publish_basic_authentication_enabled = var.instance.webdeploy_publish_basic_authentication_enabled
-  zip_deploy_file                                = var.instance.zip_deploy_file
+  app_settings                                   = each.value.app_settings
+  client_affinity_enabled                        = each.value.client_affinity_enabled
+  client_certificate_enabled                     = each.value.client_certificate_enabled
+  client_certificate_mode                        = each.value.client_certificate_mode
+  client_certificate_exclusion_paths             = each.value.client_certificate_exclusion_paths
+  enabled                                        = each.value.enabled
+  ftp_publish_basic_authentication_enabled       = each.value.ftp_publish_basic_authentication_enabled
+  https_only                                     = each.value.https_only
+  public_network_access_enabled                  = each.value.public_network_access_enabled
+  key_vault_reference_identity_id                = each.value.key_vault_reference_identity_id
+  virtual_network_subnet_id                      = each.value.virtual_network_subnet_id
+  webdeploy_publish_basic_authentication_enabled = each.value.webdeploy_publish_basic_authentication_enabled
+  zip_deploy_file                                = each.value.zip_deploy_file
+  virtual_network_backup_restore_enabled         = each.value.virtual_network_backup_restore_enabled
+  service_plan_id                                = each.value.service_plan_id
 
   tags = try(
     var.instance.tags, var.tags, null
   )
 
   site_config {
-    always_on                                     = var.instance.site_config.always_on
-    api_definition_url                            = var.instance.site_config.api_definition_url
-    api_management_api_id                         = var.instance.site_config.api_management_api_id
-    app_command_line                              = var.instance.site_config.app_command_line
-    container_registry_managed_identity_client_id = var.instance.site_config.container_registry_managed_identity_client_id
-    container_registry_use_managed_identity       = var.instance.site_config.container_registry_use_managed_identity
-    default_documents                             = var.instance.site_config.default_documents
-    ftps_state                                    = var.instance.site_config.ftps_state
-    health_check_path                             = var.instance.site_config.health_check_path
-    health_check_eviction_time_in_min             = var.instance.site_config.health_check_eviction_time_in_min
-    http2_enabled                                 = var.instance.site_config.http2_enabled
-    ip_restriction_default_action                 = var.instance.site_config.ip_restriction_default_action
-    load_balancing_mode                           = var.instance.site_config.load_balancing_mode
-    local_mysql_enabled                           = var.instance.site_config.local_mysql_enabled
-    managed_pipeline_mode                         = var.instance.site_config.managed_pipeline_mode
-    minimum_tls_version                           = var.instance.site_config.minimum_tls_version
-    remote_debugging_enabled                      = var.instance.site_config.remote_debugging_enabled
-    scm_ip_restriction_default_action             = var.instance.site_config.scm_ip_restriction_default_action
-    scm_use_main_ip_restriction                   = var.instance.site_config.scm_use_main_ip_restriction
-    use_32_bit_worker                             = var.instance.site_config.use_32_bit_worker
-    vnet_route_all_enabled                        = var.instance.site_config.vnet_route_all_enabled
-    websockets_enabled                            = var.instance.site_config.websockets_enabled
-    worker_count                                  = var.instance.site_config.worker_count
+    always_on                                     = each.value.site_config.always_on
+    api_definition_url                            = each.value.site_config.api_definition_url
+    api_management_api_id                         = each.value.site_config.api_management_api_id
+    app_command_line                              = each.value.site_config.app_command_line
+    container_registry_managed_identity_client_id = each.value.site_config.container_registry_managed_identity_client_id
+    container_registry_use_managed_identity       = each.value.site_config.container_registry_use_managed_identity
+    default_documents                             = each.value.site_config.default_documents
+    ftps_state                                    = each.value.site_config.ftps_state
+    health_check_path                             = each.value.site_config.health_check_path
+    health_check_eviction_time_in_min             = each.value.site_config.health_check_eviction_time_in_min
+    http2_enabled                                 = each.value.site_config.http2_enabled
+    ip_restriction_default_action                 = each.value.site_config.ip_restriction_default_action
+    load_balancing_mode                           = each.value.site_config.load_balancing_mode
+    local_mysql_enabled                           = each.value.site_config.local_mysql_enabled
+    managed_pipeline_mode                         = each.value.site_config.managed_pipeline_mode
+    minimum_tls_version                           = each.value.site_config.minimum_tls_version
+    remote_debugging_enabled                      = each.value.site_config.remote_debugging_enabled
+    scm_ip_restriction_default_action             = each.value.site_config.scm_ip_restriction_default_action
+    scm_use_main_ip_restriction                   = each.value.site_config.scm_use_main_ip_restriction
+    use_32_bit_worker                             = each.value.site_config.use_32_bit_worker
+    vnet_route_all_enabled                        = each.value.site_config.vnet_route_all_enabled
+    websockets_enabled                            = each.value.site_config.websockets_enabled
+    worker_count                                  = each.value.site_config.worker_count
+    remote_debugging_version                      = each.value.site_config.remote_debugging_version
+    scm_minimum_tls_version                       = each.value.site_config.scm_minimum_tls_version
+    auto_swap_slot_name                           = each.value.site_config.auto_swap_slot_name
 
     dynamic "application_stack" {
       for_each = lookup(each.value.site_config, "application_stack", null) != null ? [lookup(each.value.site_config, "application_stack")] : []
@@ -891,6 +897,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
           allowed_audiences                    = active_directory_v2.value.allowed_audiences
           allowed_groups                       = active_directory_v2.value.allowed_groups
           allowed_identities                   = active_directory_v2.value.allowed_identities
+          login_parameters                     = active_directory_v2.value.login_parameters
         }
       }
 
@@ -1113,6 +1120,7 @@ resource "azurerm_windows_web_app" "windows" {
   webdeploy_publish_basic_authentication_enabled = var.instance.webdeploy_publish_basic_authentication_enabled
   zip_deploy_file                                = var.instance.zip_deploy_file
   tags                                           = var.instance.tags
+  virtual_network_backup_restore_enabled         = var.instance.virtual_network_backup_restore_enabled
 
   site_config {
     always_on                                     = var.instance.site_config.always_on
@@ -1138,6 +1146,8 @@ resource "azurerm_windows_web_app" "windows" {
     vnet_route_all_enabled                        = var.instance.site_config.vnet_route_all_enabled
     websockets_enabled                            = var.instance.site_config.websockets_enabled
     worker_count                                  = var.instance.site_config.worker_count
+    remote_debugging_version                      = var.instance.site_config.remote_debugging_version
+    scm_minimum_tls_version                       = var.instance.site_config.scm_minimum_tls_version
 
     dynamic "application_stack" {
       for_each = lookup(each.value.site_config, "application_stack", null) != null ? [lookup(each.value.site_config, "application_stack")] : []
@@ -1169,6 +1179,15 @@ resource "azurerm_windows_web_app" "windows" {
           content {
             action_type                    = action.value.action_type
             minimum_process_execution_time = action.value.minimum_process_execution_time
+
+            dynamic "custom_action" {
+              for_each = lookup(action.value, "custom_action", null) != null ? [lookup(action.value, "custom_action")] : []
+
+              content {
+                executable = custom_action.value.executable
+                parameters = custom_action.value.parameters
+              }
+            }
           }
         }
 
@@ -1176,6 +1195,7 @@ resource "azurerm_windows_web_app" "windows" {
           for_each = lookup(auto_heal_setting.value, "trigger", null) != null ? [lookup(auto_heal_setting.value, "trigger")] : []
 
           content {
+            private_memory_kb = trigger.value.private_memory_kb
             dynamic "requests" {
               for_each = lookup(trigger.value, "requests", null) != null ? [lookup(trigger.value, "requests")] : []
 
@@ -1227,6 +1247,41 @@ resource "azurerm_windows_web_app" "windows" {
       content {
         allowed_origins     = cors.value.allowed_origins
         support_credentials = cors.value.support_credentials
+      }
+    }
+
+    dynamic "handler_mapping" {
+      for_each = {
+        for key, handler_mapping in lookup(each.value.site_config, "handler_mappings", []) : key => handler_mapping
+      }
+
+      content {
+        arguments             = handler_mapping.value.arguments
+        extension             = handler_mapping.value.extension
+        script_processor_path = handler_mapping.value.script_processor_path
+      }
+    }
+
+    dynamic "virtual_application" {
+      for_each = {
+        for key, virtual_application in lookup(each.value.site_config, "virtual_applications", []) : key => virtual_application
+      }
+
+      content {
+        preload       = virtual_application.value.preload
+        virtual_path  = virtual_application.value.virtual_path
+        physical_path = virtual_application.value.physical_path
+
+        dynamic "virtual_directory" {
+          for_each = {
+            for key, virtual_directory in lookup(virtual_application.value, "virtual_directories", []) : key => virtual_directory
+          }
+
+          content {
+            physical_path = virtual_directory.value.physical_path
+            virtual_path  = virtual_directory.value.virtual_path
+          }
+        }
       }
     }
 
@@ -1427,6 +1482,7 @@ resource "azurerm_windows_web_app" "windows" {
           allowed_audiences                    = active_directory_v2.value.allowed_audiences
           allowed_groups                       = active_directory_v2.value.allowed_groups
           allowed_identities                   = active_directory_v2.value.allowed_identities
+          login_parameters                     = active_directory_v2.value.login_parameters
         }
       }
 
@@ -1627,58 +1683,83 @@ resource "azurerm_windows_web_app" "windows" {
 
 # windows web app slot
 resource "azurerm_windows_web_app_slot" "windows" {
-  for_each = {
-    for key, value in try(var.instance.slots, {}) : key => value
-    if var.instance.type == "windows"
-  }
+  for_each = var.instance.type == "windows" ? (var.instance.slots != null ? var.instance.slots : {}) : {}
 
   name = try(
     each.value.name, each.key
   )
 
   app_service_id                                 = azurerm_windows_web_app.windows[var.instance.name].id
-  app_settings                                   = var.instance.app_settings
-  client_affinity_enabled                        = var.instance.client_affinity_enabled
-  client_certificate_enabled                     = var.instance.client_certificate_enabled
-  client_certificate_mode                        = var.instance.client_certificate_mode
-  client_certificate_exclusion_paths             = var.instance.client_certificate_exclusion_paths
-  enabled                                        = var.instance.enabled
-  ftp_publish_basic_authentication_enabled       = var.instance.ftp_publish_basic_authentication_enabled
-  https_only                                     = var.instance.https_only
-  public_network_access_enabled                  = var.instance.public_network_access_enabled
-  key_vault_reference_identity_id                = var.instance.key_vault_reference_identity_id
-  virtual_network_subnet_id                      = var.instance.virtual_network_subnet_id
-  webdeploy_publish_basic_authentication_enabled = var.instance.webdeploy_publish_basic_authentication_enabled
-  zip_deploy_file                                = var.instance.zip_deploy_file
+  app_settings                                   = each.value.app_settings
+  client_affinity_enabled                        = each.value.client_affinity_enabled
+  client_certificate_enabled                     = each.value.client_certificate_enabled
+  client_certificate_mode                        = each.value.client_certificate_mode
+  client_certificate_exclusion_paths             = each.value.client_certificate_exclusion_paths
+  enabled                                        = each.value.enabled
+  ftp_publish_basic_authentication_enabled       = each.value.ftp_publish_basic_authentication_enabled
+  https_only                                     = each.value.https_only
+  public_network_access_enabled                  = each.value.public_network_access_enabled
+  key_vault_reference_identity_id                = each.value.key_vault_reference_identity_id
+  virtual_network_subnet_id                      = each.value.virtual_network_subnet_id
+  webdeploy_publish_basic_authentication_enabled = each.value.webdeploy_publish_basic_authentication_enabled
+  zip_deploy_file                                = each.value.zip_deploy_file
+  service_plan_id                                = each.value.service_plan_id
+  virtual_network_backup_restore_enabled         = each.value.virtual_network_backup_restore_enabled
 
   tags = try(
     var.instance.tags, var.tags, {}
   )
 
   site_config {
-    always_on                                     = var.instance.site_config.always_on
-    api_definition_url                            = var.instance.site_config.api_definition_url
-    api_management_api_id                         = var.instance.site_config.api_management_api_id
-    app_command_line                              = var.instance.site_config.app_command_line
-    container_registry_managed_identity_client_id = var.instance.site_config.container_registry_managed_identity_client_id
-    container_registry_use_managed_identity       = var.instance.site_config.container_registry_use_managed_identity
-    default_documents                             = var.instance.site_config.default_documents
-    ftps_state                                    = var.instance.site_config.ftps_state
-    health_check_path                             = var.instance.site_config.health_check_path
-    health_check_eviction_time_in_min             = var.instance.site_config.health_check_eviction_time_in_min
-    http2_enabled                                 = var.instance.site_config.http2_enabled
-    ip_restriction_default_action                 = var.instance.site_config.ip_restriction_default_action
-    load_balancing_mode                           = var.instance.site_config.load_balancing_mode
-    local_mysql_enabled                           = var.instance.site_config.local_mysql_enabled
-    managed_pipeline_mode                         = var.instance.site_config.managed_pipeline_mode
-    minimum_tls_version                           = var.instance.site_config.minimum_tls_version
-    remote_debugging_enabled                      = var.instance.site_config.remote_debugging_enabled
-    scm_ip_restriction_default_action             = var.instance.site_config.scm_ip_restriction_default_action
-    scm_use_main_ip_restriction                   = var.instance.site_config.scm_use_main_ip_restriction
-    use_32_bit_worker                             = var.instance.site_config.use_32_bit_worker
-    vnet_route_all_enabled                        = var.instance.site_config.vnet_route_all_enabled
-    websockets_enabled                            = var.instance.site_config.websockets_enabled
-    worker_count                                  = var.instance.site_config.worker_count
+    always_on                                     = each.value.site_config.always_on
+    api_definition_url                            = each.value.site_config.api_definition_url
+    api_management_api_id                         = each.value.site_config.api_management_api_id
+    app_command_line                              = each.value.site_config.app_command_line
+    container_registry_managed_identity_client_id = each.value.site_config.container_registry_managed_identity_client_id
+    container_registry_use_managed_identity       = each.value.site_config.container_registry_use_managed_identity
+    default_documents                             = each.value.site_config.default_documents
+    ftps_state                                    = each.value.site_config.ftps_state
+    health_check_path                             = each.value.site_config.health_check_path
+    health_check_eviction_time_in_min             = each.value.site_config.health_check_eviction_time_in_min
+    http2_enabled                                 = each.value.site_config.http2_enabled
+    ip_restriction_default_action                 = each.value.site_config.ip_restriction_default_action
+    load_balancing_mode                           = each.value.site_config.load_balancing_mode
+    local_mysql_enabled                           = each.value.site_config.local_mysql_enabled
+    managed_pipeline_mode                         = each.value.site_config.managed_pipeline_mode
+    minimum_tls_version                           = each.value.site_config.minimum_tls_version
+    remote_debugging_enabled                      = each.value.site_config.remote_debugging_enabled
+    scm_ip_restriction_default_action             = each.value.site_config.scm_ip_restriction_default_action
+    scm_use_main_ip_restriction                   = each.value.site_config.scm_use_main_ip_restriction
+    use_32_bit_worker                             = each.value.site_config.use_32_bit_worker
+    vnet_route_all_enabled                        = each.value.site_config.vnet_route_all_enabled
+    websockets_enabled                            = each.value.site_config.websockets_enabled
+    worker_count                                  = each.value.site_config.worker_count
+    auto_swap_slot_name                           = each.value.site_config.auto_swap_slot_name
+    remote_debugging_version                      = each.value.site_config.remote_debugging_version
+    scm_minimum_tls_version                       = each.value.site_config.scm_minimum_tls_version
+
+    dynamic "virtual_application" {
+      for_each = {
+        for key, virtual_application in lookup(each.value.site_config, "virtual_applications", []) : key => virtual_application
+      }
+
+      content {
+        virtual_path  = virtual_application.value.virtual_path
+        physical_path = virtual_application.value.physical_path
+        preload       = virtual_application.value.preload
+
+        dynamic "virtual_directory" {
+          for_each = {
+            for key, virtual_directory in lookup(virtual_application.value, "virtual_directories", []) : key => virtual_directory
+          }
+
+          content {
+            physical_path = virtual_directory.value.physical_path
+            virtual_path  = virtual_directory.value.virtual_path
+          }
+        }
+      }
+    }
 
     dynamic "application_stack" {
       for_each = lookup(each.value.site_config, "application_stack", null) != null ? [lookup(each.value.site_config, "application_stack")] : []
@@ -1710,6 +1791,15 @@ resource "azurerm_windows_web_app_slot" "windows" {
           content {
             action_type                    = action.value.action_type
             minimum_process_execution_time = action.value.minimum_process_execution_time
+
+            dynamic "custom_action" {
+              for_each = lookup(action.value, "custom_action", null) != null ? [lookup(action.value, "custom_action")] : []
+
+              content {
+                executable = custom_action.value.executable
+                parameters = custom_action.value.parameters
+              }
+            }
           }
         }
 
@@ -1717,6 +1807,8 @@ resource "azurerm_windows_web_app_slot" "windows" {
           for_each = lookup(auto_heal_setting.value, "trigger", null) != null ? [lookup(auto_heal_setting.value, "trigger")] : []
 
           content {
+            private_memory_kb = trigger.value.private_memory_kb
+
             dynamic "requests" {
               for_each = lookup(trigger.value, "requests", null) != null ? [lookup(trigger.value, "requests")] : []
 
@@ -1738,6 +1830,7 @@ resource "azurerm_windows_web_app_slot" "windows" {
 
             dynamic "slow_request_with_path" {
               for_each = lookup(trigger.value, "slow_request_with_path", null) != null ? [lookup(trigger.value, "slow_request_with_path")] : []
+
               content {
 
                 count      = slow_requests.value.count
@@ -1770,6 +1863,18 @@ resource "azurerm_windows_web_app_slot" "windows" {
       content {
         allowed_origins     = cors.value.allowed_origins
         support_credentials = cors.value.support_credentials
+      }
+    }
+
+    dynamic "handler_mapping" {
+      for_each = {
+        for key, handler_mapping in lookup(each.value.site_config, "handler_mappings", []) : key => handler_mapping
+      }
+
+      content {
+        arguments             = handler_mapping.value.arguments
+        extension             = handler_mapping.value.extension
+        script_processor_path = handler_mapping.value.script_processor_path
       }
     }
 
@@ -1970,7 +2075,7 @@ resource "azurerm_windows_web_app_slot" "windows" {
           allowed_audiences                    = active_directory_v2.value.allowed_audiences
           allowed_groups                       = active_directory_v2.value.allowed_groups
           allowed_identities                   = active_directory_v2.value.allowed_identities
-
+          login_parameters                     = active_directory_v2.value.login_parameters
         }
       }
 
