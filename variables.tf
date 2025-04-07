@@ -19,6 +19,7 @@ variable "instance" {
     virtual_network_subnet_id                      = optional(string, null)
     webdeploy_publish_basic_authentication_enabled = optional(bool, true)
     zip_deploy_file                                = optional(string, null)
+    virtual_network_backup_restore_enabled         = optional(bool, false)
     tags                                           = optional(map(string))
     identity = optional(object({
       type         = string
@@ -48,6 +49,8 @@ variable "instance" {
       vnet_route_all_enabled                        = optional(bool, false)
       websockets_enabled                            = optional(bool, false)
       worker_count                                  = optional(number, null)
+      scm_minimum_tls_version                       = optional(string, "1.2")
+      remote_debugging_version                      = optional(string, null)
       application_stack = optional(object({
         docker_image_name            = optional(string, null)
         docker_registry_url          = optional(string, null)
@@ -103,6 +106,20 @@ variable "instance" {
         allowed_origins     = optional(list(string), null)
         support_credentials = optional(bool, false)
       }), null)
+      handler_mapping = optional(list(object({
+        arguments             = optional(string, null)
+        extension             = string
+        script_processor_path = string
+      })), [])
+      virtual_application = optional(list(object({
+        virtual_path  = string
+        physical_path = string
+        preload       = optional(bool, null)
+        virtual_directory = optional(list(object({
+          virtual_path  = string
+          physical_path = string
+        })), [])
+      })), [])
       ip_restrictions = optional(map(object({
         name                      = optional(string, null)
         action                    = optional(string, "Allow")
@@ -223,6 +240,7 @@ variable "instance" {
         allowed_audiences                    = optional(list(string), [])
         allowed_groups                       = optional(list(string), [])
         allowed_identities                   = optional(list(string), [])
+        login_parameters                     = optional(map(string), {})
       }), null)
       azure_static_web_app_v2 = optional(object({
         client_id = string
@@ -334,6 +352,8 @@ variable "instance" {
       virtual_network_subnet_id                      = optional(string, null)
       webdeploy_publish_basic_authentication_enabled = optional(bool, true)
       zip_deploy_file                                = optional(string, null)
+      virtual_network_backup_restore_enabled         = optional(bool, false)
+      service_plan_id                                = optional(string, null)
       tags                                           = optional(map(string))
       identity = optional(object({
         type         = string
@@ -363,6 +383,9 @@ variable "instance" {
         vnet_route_all_enabled                        = optional(bool, false)
         websockets_enabled                            = optional(bool, false)
         worker_count                                  = optional(number, null)
+        remote_debugging_version                      = optional(string, null)
+        scm_minimum_tls_version                       = optional(string, "1.2")
+        auto_swap_slot_name                           = optional(string, null)
         application_stack = optional(object({
           docker_image_name            = optional(string, null)
           docker_registry_url          = optional(string, null)
@@ -387,6 +410,10 @@ variable "instance" {
           action = object({
             action_type                    = string
             minimum_process_execution_time = optional(string, null)
+            custom_action = optional(object({ # Added block
+              executable = string
+              parameters = optional(string, null)
+            }), null)
           })
           trigger = object({
             requests = optional(object({
@@ -418,6 +445,20 @@ variable "instance" {
           allowed_origins     = optional(list(string), null)
           support_credentials = optional(bool, false)
         }), null)
+        handler_mapping = optional(list(object({
+          arguments             = optional(string, null)
+          extension             = string
+          script_processor_path = string
+        })), [])
+        virtual_application = optional(list(object({
+          virtual_path  = string
+          physical_path = string
+          preload       = optional(bool, null)
+          virtual_directory = optional(list(object({
+            virtual_path  = string
+            physical_path = string
+          })), [])
+        })), [])
         ip_restrictions = optional(map(object({
           name                      = optional(string, null)
           action                    = optional(string, "Allow")
@@ -449,7 +490,189 @@ variable "instance" {
           }), null)
         })), {})
       })
-    })), {})
+      auth_settings = optional(object({
+        enabled                        = bool
+        additional_login_parameters    = optional(map(string), null)
+        allowed_external_redirect_urls = optional(list(string), null)
+        default_provider               = optional(string, null)
+        issuer                         = optional(string, null)
+        runtime_version                = optional(string, null)
+        token_refresh_extension_hours  = optional(number, 72)
+        token_store_enabled            = optional(bool, false)
+        unauthenticated_client_action  = optional(string, null)
+        active_directory = optional(object({
+          client_id                  = string
+          allowed_audiences          = list(string)
+          client_secret              = optional(string, null)
+          client_secret_setting_name = optional(string, null)
+        }), null)
+        facebook = optional(object({
+          app_id                  = string
+          app_secret              = optional(string, null)
+          app_secret_setting_name = optional(string, null)
+          oauth_scopes            = optional(list(string), null)
+        }), null)
+        github = optional(object({
+          client_id                  = string
+          client_secret              = optional(string, null)
+          client_secret_setting_name = optional(string, null)
+          oauth_scopes               = optional(list(string), null)
+        }), null)
+        google = optional(object({
+          client_id                  = string
+          client_secret              = optional(string, null)
+          client_secret_setting_name = optional(string, null)
+          oauth_scopes               = optional(list(string), null)
+        }), null)
+        microsoft = optional(object({
+          client_id                  = string
+          client_secret              = optional(string, null)
+          client_secret_setting_name = optional(string, null)
+          oauth_scopes               = optional(list(string), null)
+        }), null)
+        twitter = optional(object({
+          consumer_key                 = string
+          consumer_secret              = optional(string, null)
+          consumer_secret_setting_name = optional(string, null)
+        }), null)
+      }), null)
+      auth_settings_v2 = optional(object({
+        auth_enabled                            = optional(bool, null)
+        runtime_version                         = optional(string, "~1")
+        config_file_path                        = optional(string, null)
+        require_authentication                  = optional(bool, null)
+        unauthenticated_action                  = optional(string, null)
+        default_provider                        = optional(string, null)
+        excluded_paths                          = optional(list(string), null)
+        require_https                           = optional(bool, true)
+        http_route_api_prefix                   = optional(string, "/.auth")
+        forward_proxy_convention                = optional(string, "NoProxy")
+        forward_proxy_custom_host_header_name   = optional(string, null)
+        forward_proxy_custom_scheme_header_name = optional(string, null)
+        login = optional(object({
+          logout_endpoint                   = optional(string, null)
+          token_store_enabled               = optional(bool, false)
+          token_refresh_extension_time      = optional(number, 72)
+          token_store_path                  = optional(string, null)
+          token_store_sas_setting_name      = optional(string, null)
+          preserve_url_fragments_for_logins = optional(bool, false)
+          allowed_external_redirect_urls    = optional(list(string), [])
+          cookie_expiration_convention      = optional(string, "FixedTime")
+          cookie_expiration_time            = optional(string, "08:00:00")
+          validate_nonce                    = optional(bool, true)
+          nonce_expiration_time             = optional(string, "00:05:00")
+        }), null)
+        apple_v2 = optional(object({
+          client_id                  = string
+          client_secret_setting_name = string
+          login_scopes               = optional(list(string), null)
+        }), null)
+        active_directory_v2 = optional(object({
+          client_id                            = string
+          tenant_auth_endpoint                 = string
+          client_secret_setting_name           = optional(string, null)
+          client_secret_certificate_thumbprint = optional(string, null)
+          jwt_allowed_groups                   = optional(list(string), [])
+          jwt_allowed_client_applications      = optional(list(string), [])
+          www_authentication_disabled          = optional(bool, false)
+          allowed_applications                 = optional(list(string), [])
+          allowed_audiences                    = optional(list(string), [])
+          allowed_groups                       = optional(list(string), [])
+          allowed_identities                   = optional(list(string), [])
+          login_parameters                     = optional(map(string), {})
+        }), null)
+        azure_static_web_app_v2 = optional(object({
+          client_id = string
+        }), null)
+        custom_oidc_v2 = optional(map(object({
+          name                          = string
+          client_id                     = string
+          openid_configuration_endpoint = string
+          name_claim_type               = optional(string, null)
+          scopes                        = optional(list(string), [])
+          client_credential_method      = optional(string, null)
+          client_secret_setting_name    = optional(string, null)
+          authorisation_endpoint        = optional(string, null)
+          token_endpoint                = optional(string, null)
+          issuer_endpoint               = optional(string, null)
+          certification_uri             = optional(string, null)
+        })), {})
+        facebook_v2 = optional(object({
+          app_id                  = string
+          app_secret_setting_name = string
+          graph_api_version       = optional(string, null)
+          login_scopes            = optional(list(string), [])
+        }), null)
+        github_v2 = optional(object({
+          client_id                  = string
+          client_secret_setting_name = string
+          login_scopes               = optional(list(string), [])
+        }), null)
+        google_v2 = optional(object({
+          client_id                  = string
+          client_secret_setting_name = string
+          allowed_audiences          = optional(list(string), [])
+          login_scopes               = optional(list(string), [])
+        }), null)
+        microsoft_v2 = optional(object({
+          client_id                  = string
+          client_secret_setting_name = string
+          allowed_audiences          = optional(list(string), [])
+          login_scopes               = optional(list(string), [])
+        }), null)
+        twitter_v2 = optional(object({
+          consumer_key                 = string
+          consumer_secret_setting_name = string
+        }), null)
+      }), null)
+      backup = optional(object({
+        enabled             = optional(bool, true)
+        name                = string
+        storage_account_url = string
+        schedule = object({
+          frequency_interval       = number
+          frequency_unit           = string
+          keep_at_least_one_backup = optional(bool, false)
+          retention_period_days    = optional(number, 30)
+          start_time               = optional(string, null)
+        })
+      }), null)
+      connection_string = optional(object({
+        name  = string
+        type  = string
+        value = string
+      }), null)
+      logs = optional(object({
+        detailed_error_messages = optional(bool, null)
+        failed_request_tracing  = optional(bool, null)
+        application_logs = optional(object({
+          file_system_level = string
+          azure_blob_storage = optional(object({
+            level             = string
+            sas_url           = string
+            retention_in_days = optional(number, 0)
+          }), null)
+        }), null)
+        http_logs = optional(object({
+          azure_blob_storage = optional(object({
+            sas_url           = string
+            retention_in_days = optional(number, 0)
+          }), null)
+          file_system = optional(object({
+            retention_in_days = optional(number, 0)
+            retention_in_mb   = number
+          }), null)
+        }), null)
+      }), null)
+      storage_account = optional(object({
+        access_key   = string
+        account_name = string
+        name         = string
+        share_name   = string
+        type         = string
+        mount_path   = optional(string, null)
+      }), null)
+    })))
   })
 
   validation {
