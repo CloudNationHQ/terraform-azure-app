@@ -1,6 +1,6 @@
 module "naming" {
   source  = "cloudnationhq/naming/azure"
-  version = "~> 0.1"
+  version = "~> 0.24"
 
   suffix = ["demo", "dev"]
 }
@@ -19,7 +19,7 @@ module "rg" {
 
 module "network" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 4.0"
+  version = "~> 8.0"
 
   naming = local.naming
 
@@ -27,12 +27,12 @@ module "network" {
     name           = module.naming.virtual_network.name
     location       = module.rg.groups.demo.location
     resource_group = module.rg.groups.demo.name
-    cidr           = ["10.18.0.0/16"]
+    address_space  = ["10.18.0.0/16"]
 
     subnets = {
       sn1 = {
-        cidr = ["10.18.1.0/24"]
-        nsg  = {}
+        address_prefixes = ["10.18.1.0/24"]
+        nsg              = {}
         delegations = {
           web = {
             name = "Microsoft.Web/serverFarms"
@@ -43,8 +43,8 @@ module "network" {
         }
       }
       sn2 = {
-        nsg  = {}
-        cidr = ["10.18.2.0/24"]
+        nsg              = {}
+        address_prefixes = ["10.18.2.0/24"]
       }
     }
   }
@@ -52,17 +52,19 @@ module "network" {
 
 module "private_dns" {
   source  = "cloudnationhq/pdns/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   resource_group = module.rg.groups.demo.name
 
   zones = {
-    web = {
-      name = "privatelink.azurewebsites.net"
-      virtual_network_links = {
-        link1 = {
-          virtual_network_id   = module.network.vnet.id
-          registration_enabled = true
+    private = {
+      web = {
+        name = "privatelink.azurewebsites.net"
+        virtual_network_links = {
+          link1 = {
+            virtual_network_id   = module.network.vnet.id
+            registration_enabled = true
+          }
         }
       }
     }
@@ -81,7 +83,7 @@ module "privatelink" {
       name                           = module.naming.private_endpoint.name
       subnet_id                      = module.network.subnets.sn2.id
       private_connection_resource_id = module.webapp.instance.id
-      private_dns_zone_ids           = [module.private_dns.zones.web.id]
+      private_dns_zone_ids           = [module.private_dns.private_zones.web.id]
       subresource_names              = ["sites"]
     }
   }
@@ -103,16 +105,27 @@ module "serviceplan" {
   }
 }
 
+module "identity" {
+  source  = "cloudnationhq/uai/azure"
+  version = "~> 1.0"
+
+  config = {
+    name           = module.naming.user_assigned_identity.name
+    location       = module.rg.groups.demo.location
+    resource_group = module.rg.groups.demo.name
+  }
+}
+
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   resource_group = module.rg.groups.demo.name
   location       = module.rg.groups.demo.location
 
   instance = {
     type                          = "linux"
-    name                          = "app-demo-dev-xaeso"
+    name                          = "app-demo-dev-xaesw"
     service_plan_id               = module.serviceplan.plans.web.id
     virtual_network_subnet_id     = module.network.subnets.sn1.id
     public_network_access_enabled = false
@@ -123,7 +136,6 @@ module "webapp" {
       auto_heal_enabled             = true
       http2_enabled                 = true
       load_balancing_mode           = "LeastRequests"
-      minimum_tls_version           = "1.2"
       ip_restriction_default_action = "Deny"
 
       application_stack = {
@@ -164,7 +176,8 @@ module "webapp" {
     }
 
     identity = {
-      type = "UserAssigned"
+      type         = "UserAssigned"
+      identity_ids = [module.identity.config.id]
     }
   }
 }
