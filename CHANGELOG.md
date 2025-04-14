@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1](https://github.com/CloudNationHQ/terraform-azure-app/compare/v3.1.0...v3.1.1) (2025-04-14)
+
+
+### Bug Fixes
+
+* fix submodule generation from makefile ([#36](https://github.com/CloudNationHQ/terraform-azure-app/issues/36)) ([1ca3728](https://github.com/CloudNationHQ/terraform-azure-app/commit/1ca3728c402885240699ef7580393430264bdea8))
+
 ## [3.1.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v3.0.0...v3.1.0) (2025-04-07)
 
 
