@@ -118,10 +118,10 @@ module "identity" {
 
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
-  resource_group = module.rg.groups.demo.name
-  location       = module.rg.groups.demo.location
+  resource_group_name = module.rg.groups.demo.name
+  location            = module.rg.groups.demo.location
 
   instance = {
     type                          = "linux"
@@ -133,7 +133,6 @@ module "webapp" {
 
     site_config = {
       always_on                     = false
-      auto_heal_enabled             = true
       http2_enabled                 = true
       load_balancing_mode           = "LeastRequests"
       ip_restriction_default_action = "Deny"
@@ -145,8 +144,7 @@ module "webapp" {
 
       auto_heal_setting = {
         action = {
-          action_type                = "Recycle"
-          min_process_execution_time = "00:00:30"
+          action_type = "Recycle"
         }
         trigger = {
           requests = {
