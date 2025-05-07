@@ -11,6 +11,11 @@
 
 * small refactor ([#39](https://github.com/CloudNationHQ/terraform-azure-app/issues/39)) ([ac7afcf](https://github.com/CloudNationHQ/terraform-azure-app/commit/ac7afcf18eb768449073734907565929b35148ad))
 
+### Upgrade from v3.1.1 to v4.0.0:
+
+- Update module reference to: `version = "~> 4.0"`
+- The property and variable resource_group is renamed to resource_group_name
+
 ## [3.1.1](https://github.com/CloudNationHQ/terraform-azure-app/compare/v3.1.0...v3.1.1) (2025-04-14)
 
 
