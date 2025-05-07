@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v3.1.1...v4.0.0) (2025-05-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* The data structure changed, causing a recreate on existing resources.
+
+### Features
+
+* small refactor ([#39](https://github.com/CloudNationHQ/terraform-azure-app/issues/39)) ([ac7afcf](https://github.com/CloudNationHQ/terraform-azure-app/commit/ac7afcf18eb768449073734907565929b35148ad))
+
 ## [3.1.1](https://github.com/CloudNationHQ/terraform-azure-app/compare/v3.1.0...v3.1.1) (2025-04-14)
 
 
