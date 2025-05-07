@@ -3,7 +3,7 @@ variable "instance" {
   type = object({
     name                                           = string
     type                                           = string
-    resource_group                                 = optional(string, null)
+    resource_group_name                            = optional(string, null)
     location                                       = optional(string, null)
     service_plan_id                                = string
     app_settings                                   = optional(map(string), {})
@@ -686,7 +686,7 @@ variable "instance" {
   }
 
   validation {
-    condition     = var.instance.resource_group != null || var.resource_group != null
+    condition     = var.instance.resource_group_name != null || var.resource_group_name != null
     error_message = "Resource group name must be provided either in the instance object or as a separate variable."
   }
 }
@@ -697,7 +697,7 @@ variable "location" {
   default     = null
 }
 
-variable "resource_group" {
+variable "resource_group_name" {
   description = "default resource group to be used"
   type        = string
   default     = null
