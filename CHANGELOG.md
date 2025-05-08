@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.1](https://github.com/CloudNationHQ/terraform-azure-app/compare/v4.0.0...v4.0.1) (2025-05-08)
+
+
+### Bug Fixes
+
+* remove sequential entry in makefile ([#41](https://github.com/CloudNationHQ/terraform-azure-app/issues/41)) ([1009359](https://github.com/CloudNationHQ/terraform-azure-app/commit/1009359990a05b716195fc43ee201cbcc03df638))
+
 ## [4.0.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v3.1.1...v4.0.0) (2025-05-07)
 
 
