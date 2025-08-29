@@ -1036,7 +1036,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
           file_system_level = application_logs.value.file_system_level
 
           dynamic "azure_blob_storage" {
-            for_each = lookup(each.value.application_logs, "azure_blob_storage", null) != null ? [lookup(each.value.application_logs, "azure_blob_storage", null)] : []
+            for_each = lookup(application_logs.value, "azure_blob_storage", null) != null ? [lookup(application_logs.value, "azure_blob_storage", null)] : []
 
             content {
               level             = azure_blob_storage.value.level
@@ -1624,7 +1624,7 @@ resource "azurerm_windows_web_app" "windows" {
           file_system_level = application_logs.value.file_system_level
 
           dynamic "azure_blob_storage" {
-            for_each = lookup(each.value.application_logs, "azure_blob_storage", null) != null ? [lookup(each.value.application_logs, "azure_blob_storage", null)] : []
+            for_each = lookup(application_logs.value, "azure_blob_storage", null) != null ? [lookup(application_logs.value, "azure_blob_storage", null)] : []
 
             content {
               level             = azure_blob_storage.value.level
