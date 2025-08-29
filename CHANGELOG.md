@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.2](https://github.com/CloudNationHQ/terraform-azure-app/compare/v4.0.1...v4.0.2) (2025-08-29)
+
+
+### Bug Fixes
+
+* correct lookup reference for azure_blob_storage in application logs ([#48](https://github.com/CloudNationHQ/terraform-azure-app/issues/48)) ([fc34d87](https://github.com/CloudNationHQ/terraform-azure-app/commit/fc34d87c80865cbf22cad4d75b4217194cd6c459))
+
 ## [4.0.1](https://github.com/CloudNationHQ/terraform-azure-app/compare/v4.0.0...v4.0.1) (2025-05-08)
 
 
