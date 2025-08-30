@@ -113,19 +113,19 @@ resource "azurerm_linux_web_app" "linux" {
               for_each = lookup(trigger.value, "slow_request", null) != null ? [lookup(trigger.value, "slow_request", null)] : []
 
               content {
-                count      = slow_requests.value.count
-                interval   = slow_requests.value.interval
-                time_taken = slow_requests.value.time_taken
+                count      = slow_request.value.count
+                interval   = slow_request.value.interval
+                time_taken = slow_request.value.time_taken
               }
             }
             dynamic "slow_request_with_path" {
               for_each = lookup(trigger.value, "slow_request_with_path", null) != null ? [lookup(trigger.value, "slow_request_with_path", null)] : []
 
               content {
-                count      = slow_requests.value.count
-                interval   = slow_requests.value.interval
-                time_taken = slow_requests.value.time_taken
-                path       = slow_requests.value.path
+                count      = slow_request_with_path.value.count
+                interval   = slow_request_with_path.value.interval
+                time_taken = slow_request_with_path.value.time_taken
+                path       = slow_request_with_path.value.path
               }
             }
 
@@ -333,7 +333,6 @@ resource "azurerm_linux_web_app" "linux" {
           client_id                  = apple_v2.value.client_id
           client_secret_setting_name = apple_v2.value.client_secret_setting_name
           login_scopes               = apple_v2.value.login_scopes
-
         }
       }
 
@@ -371,7 +370,7 @@ resource "azurerm_linux_web_app" "linux" {
           name                          = custom_oidc_v2.value.name
           client_id                     = custom_oidc_v2.value.client_id
           openid_configuration_endpoint = custom_oidc_v2.value.openid_configuration_endpoint
-          name_claim_type               = custom_oidc_v2.value.name_clame_type
+          name_claim_type               = custom_oidc_v2.value.name_claim_type
           scopes                        = custom_oidc_v2.value.scopes
           client_credential_method      = custom_oidc_v2.value.client_credential_method
           client_secret_setting_name    = custom_oidc_v2.value.client_secret_setting_name
@@ -658,9 +657,9 @@ resource "azurerm_linux_web_app_slot" "linux" {
               for_each = lookup(trigger.value, "slow_request", null) != null ? [lookup(trigger.value, "slow_request", null)] : []
 
               content {
-                count      = slow_requests.value.count
-                interval   = slow_requests.value.interval
-                time_taken = slow_requests.value.time_taken
+                count      = slow_request.value.count
+                interval   = slow_request.value.interval
+                time_taken = slow_request.value.time_taken
               }
             }
 
@@ -668,10 +667,10 @@ resource "azurerm_linux_web_app_slot" "linux" {
               for_each = lookup(trigger.value, "slow_request_with_path", null) != null ? [lookup(trigger.value, "slow_request_with_path", null)] : []
 
               content {
-                count      = slow_requests.value.count
-                interval   = slow_requests.value.interval
-                time_taken = slow_requests.value.time_taken
-                path       = slow_requests.value.path
+                count      = slow_request_with_path.value.count
+                interval   = slow_request_with_path.value.interval
+                time_taken = slow_request_with_path.value.time_taken
+                path       = slow_request_with_path.value.path
               }
             }
             dynamic "status_code" {
@@ -916,7 +915,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
           name                          = custom_oidc_v2.value.name
           client_id                     = custom_oidc_v2.value.client_id
           openid_configuration_endpoint = custom_oidc_v2.value.openid_configuration_endpoint
-          name_claim_type               = custom_oidc_v2.value.name_clame_type
+          name_claim_type               = custom_oidc_v2.value.name_claim_type
           scopes                        = custom_oidc_v2.value.scopes
           client_credential_method      = custom_oidc_v2.value.client_credential_method
           authorisation_endpoint        = custom_oidc_v2.value.authorisation_endpoint
@@ -1211,19 +1210,19 @@ resource "azurerm_windows_web_app" "windows" {
               for_each = lookup(trigger.value, "slow_request", null) != null ? [lookup(trigger.value, "slow_request", null)] : []
 
               content {
-                count      = slow_requests.value.count
-                interval   = slow_requests.value.interval
-                time_taken = slow_requests.value.time_taken
+                count      = slow_request.value.count
+                interval   = slow_request.value.interval
+                time_taken = slow_request.value.time_taken
               }
             }
             dynamic "slow_request_with_path" {
               for_each = lookup(trigger.value, "slow_request_with_path", null) != null ? [lookup(trigger.value, "slow_request_with_path", null)] : []
 
               content {
-                count      = slow_requests.value.count
-                interval   = slow_requests.value.interval
-                time_taken = slow_requests.value.time_taken
-                path       = slow_requests.value.path
+                count      = slow_request_with_path.value.count
+                interval   = slow_request_with_path.value.interval
+                time_taken = slow_request_with_path.value.time_taken
+                path       = slow_request_with_path.value.path
               }
             }
 
@@ -1504,7 +1503,7 @@ resource "azurerm_windows_web_app" "windows" {
           name                          = custom_oidc_v2.value.name
           client_id                     = custom_oidc_v2.value.client_id
           openid_configuration_endpoint = custom_oidc_v2.value.openid_configuration_endpoint
-          name_claim_type               = custom_oidc_v2.value.name_clame_type
+          name_claim_type               = custom_oidc_v2.value.name_claim_type
           scopes                        = custom_oidc_v2.value.scopes
           client_credential_method      = custom_oidc_v2.value.client_credential_method
           client_secret_setting_name    = custom_oidc_v2.value.client_secret_setting_name
@@ -1825,9 +1824,9 @@ resource "azurerm_windows_web_app_slot" "windows" {
               for_each = lookup(trigger.value, "slow_request", null) != null ? [lookup(trigger.value, "slow_request", null)] : []
 
               content {
-                count      = slow_requests.value.count
-                interval   = slow_requests.value.interval
-                time_taken = slow_requests.value.time_taken
+                count      = slow_request.value.count
+                interval   = slow_request.value.interval
+                time_taken = slow_request.value.time_taken
               }
             }
 
@@ -1836,10 +1835,10 @@ resource "azurerm_windows_web_app_slot" "windows" {
 
               content {
 
-                count      = slow_requests.value.count
-                interval   = slow_requests.value.interval
-                time_taken = slow_requests.value.time_taken
-                path       = slow_requests.value.path
+                count      = slow_request_with_path.value.count
+                interval   = slow_request_with_path.value.interval
+                time_taken = slow_request_with_path.value.time_taken
+                path       = slow_request_with_path.value.path
               }
             }
 
@@ -2097,7 +2096,7 @@ resource "azurerm_windows_web_app_slot" "windows" {
           name                          = custom_oidc_v2.value.name
           client_id                     = custom_oidc_v2.value.client_id
           openid_configuration_endpoint = custom_oidc_v2.value.openid_configuration_endpoint
-          name_claim_type               = custom_oidc_v2.value.name_clame_type
+          name_claim_type               = custom_oidc_v2.value.name_claim_type
           scopes                        = custom_oidc_v2.value.scopes
           client_credential_method      = custom_oidc_v2.value.client_credential_method
           client_secret_setting_name    = custom_oidc_v2.value.client_secret_setting_name
