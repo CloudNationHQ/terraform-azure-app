@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.3](https://github.com/CloudNationHQ/terraform-azure-app/compare/v4.0.2...v4.0.3) (2025-09-01)
+
+
+### Bug Fixes
+
+* correct variable names and type definition ([#50](https://github.com/CloudNationHQ/terraform-azure-app/issues/50)) ([0158bdd](https://github.com/CloudNationHQ/terraform-azure-app/commit/0158bdd15150855e7d8ca3a4670f377288288c6c))
+
 ## [4.0.2](https://github.com/CloudNationHQ/terraform-azure-app/compare/v4.0.1...v4.0.2) (2025-08-29)
 
 
