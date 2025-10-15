@@ -19,15 +19,15 @@ module "rg" {
 
 module "network" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 8.0"
+  version = "~> 9.0"
 
   naming = local.naming
 
   vnet = {
-    name           = module.naming.virtual_network.name
-    location       = module.rg.groups.demo.location
-    resource_group = module.rg.groups.demo.name
-    address_space  = ["10.18.0.0/16"]
+    name                = module.naming.virtual_network.name
+    location            = module.rg.groups.demo.location
+    resource_group_name = module.rg.groups.demo.name
+    address_space       = ["10.18.0.0/16"]
     subnets = {
       sn1 = {
         address_prefixes = ["10.18.1.0/24"]
@@ -39,9 +39,9 @@ module "network" {
 
 module "private_dns" {
   source  = "cloudnationhq/pdns/azure"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
-  resource_group = module.rg.groups.demo.name
+  resource_group_name = module.rg.groups.demo.name
 
   zones = {
     private = {
@@ -60,41 +60,47 @@ module "private_dns" {
 
 module "privatelink" {
   source  = "cloudnationhq/pe/azure"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
-  resource_group = module.rg.groups.demo.name
-  location       = module.rg.groups.demo.location
+  resource_group_name = module.rg.groups.demo.name
+  location            = module.rg.groups.demo.location
 
   endpoints = {
     web = {
-      name                           = module.naming.private_endpoint.name
-      subnet_id                      = module.network.subnets.sn1.id
-      private_connection_resource_id = module.webapp.instance.id
-      private_dns_zone_ids           = [module.private_dns.private_zones.web.id]
-      subresource_names              = ["sites"]
+      name      = module.naming.private_endpoint.name
+      subnet_id = module.network.subnets.sn1.id
+
+      private_dns_zone_group = {
+        private_dns_zone_ids = [module.private_dns.private_zones.web.id]
+      }
+
+      private_service_connection = {
+        private_connection_resource_id = module.webapp.instance.id
+        subresource_names              = ["sites"]
+      }
     }
   }
 }
 
 module "appservice" {
   source  = "cloudnationhq/plan/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
-  resource_group = module.rg.groups.demo.name
-  location       = module.rg.groups.demo.location
+  resource_group_name = module.rg.groups.demo.name
+  location            = module.rg.groups.demo.location
 
   plans = {
     web = {
       name     = module.naming.app_service_plan.name
       os_type  = "Linux"
-      sku_name = "P0v3"
+      sku_name = "P1v3"
     }
   }
 }
 
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   resource_group_name = module.rg.groups.demo.name
   location            = module.rg.groups.demo.location

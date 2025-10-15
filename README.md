@@ -126,6 +126,7 @@ object({
           minimum_process_execution_time = optional(string)
         })
         trigger = object({
+          private_memory_kb = optional(number)
           requests = optional(object({
             count    = number
             interval = string
@@ -155,20 +156,20 @@ object({
         allowed_origins     = optional(list(string))
         support_credentials = optional(bool, false)
       }), null)
-      handler_mapping = optional(list(object({
+      handler_mappings = optional(map(object({
         arguments             = optional(string)
         extension             = string
         script_processor_path = string
-      })), [])
-      virtual_application = optional(list(object({
+      })), {})
+      virtual_applications = optional(map(object({
         virtual_path  = string
         physical_path = string
         preload       = optional(bool)
-        virtual_directory = optional(list(object({
+        virtual_directories = optional(map(object({
           virtual_path  = string
           physical_path = string
-        })), [])
-      })), [])
+        })), {})
+      })), {})
       ip_restrictions = optional(map(object({
         name                      = optional(string)
         action                    = optional(string, "Allow")
@@ -347,11 +348,12 @@ object({
         start_time               = optional(string)
       })
     }), null)
-    connection_string = optional(object({
-      name  = string
-      type  = string
-      value = string
-    }), null)
+    connection_strings = optional(
+      map(object({
+        name  = string
+        type  = string
+        value = string
+    })), {})
     logs = optional(object({
       detailed_error_messages = optional(bool)
       failed_request_tracing  = optional(bool)
@@ -374,14 +376,14 @@ object({
         }), null)
       }), null)
     }), null)
-    storage_account = optional(object({
+    storage_accounts = optional(map(object({
       access_key   = string
       account_name = string
       name         = string
       share_name   = string
       type         = string
       mount_path   = optional(string)
-    }), null)
+    })), {})
     sticky_settings = optional(object({
       app_setting_names       = optional(list(string), [])
       connection_string_names = optional(list(string), [])
@@ -465,6 +467,7 @@ object({
             }), null)
           })
           trigger = object({
+            private_memory_kb = optional(number)
             requests = optional(object({
               count    = number
               interval = string
@@ -494,20 +497,20 @@ object({
           allowed_origins     = optional(list(string))
           support_credentials = optional(bool, false)
         }), null)
-        handler_mapping = optional(list(object({
+        handler_mappings = optional(map(object({
           arguments             = optional(string)
           extension             = string
           script_processor_path = string
-        })), [])
-        virtual_application = optional(list(object({
+        })), {})
+        virtual_applications = optional(map(object({
           virtual_path  = string
           physical_path = string
           preload       = optional(bool)
-          virtual_directory = optional(list(object({
+          virtual_directories = optional(map(object({
             virtual_path  = string
             physical_path = string
-          })), [])
-        })), [])
+          })), {})
+        })), {})
         ip_restrictions = optional(map(object({
           name                      = optional(string)
           action                    = optional(string, "Allow")
@@ -686,11 +689,11 @@ object({
           start_time               = optional(string)
         })
       }), null)
-      connection_string = optional(object({
+      connection_strings = optional(map(object({
         name  = string
         type  = string
         value = string
-      }), null)
+      })), {})
       logs = optional(object({
         detailed_error_messages = optional(bool)
         failed_request_tracing  = optional(bool)
@@ -713,15 +716,15 @@ object({
           }), null)
         }), null)
       }), null)
-      storage_account = optional(object({
+      storage_accounts = optional(map(object({
         access_key   = string
         account_name = string
         name         = string
         share_name   = string
         type         = string
         mount_path   = optional(string)
-      }), null)
-    })))
+      })), {})
+    })), {})
   })
 ```
 
@@ -761,9 +764,9 @@ The following outputs are exported:
 
 Description: contains all web app configuration
 
-### <a name="output_slot"></a> [slot](#output\_slot)
+### <a name="output_slots"></a> [slots](#output\_slots)
 
-Description: contains all web app slot configuration
+Description: contains all web app slot configurations
 <!-- END_TF_DOCS -->
 
 ## Goals
