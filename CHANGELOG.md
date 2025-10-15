@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.0.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v4.0.3...v5.0.0) (2025-10-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* this change expects to change the existing data structure
+
+### Features
+
+* improved overall iterations, fixed several typos and changed output names slots ([#56](https://github.com/CloudNationHQ/terraform-azure-app/issues/56)) ([92910a7](https://github.com/CloudNationHQ/terraform-azure-app/commit/92910a78237abb99ff949391aa48c634727dcbb1))
+
 ## [4.0.3](https://github.com/CloudNationHQ/terraform-azure-app/compare/v4.0.2...v4.0.3) (2025-09-01)
 
 
