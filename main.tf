@@ -28,6 +28,7 @@ resource "azurerm_linux_web_app" "linux" {
   public_network_access_enabled                  = var.instance.public_network_access_enabled
   key_vault_reference_identity_id                = var.instance.key_vault_reference_identity_id
   virtual_network_subnet_id                      = var.instance.virtual_network_subnet_id
+  vnet_image_pull_enabled                        = var.instance.vnet_image_pull_enabled
   webdeploy_publish_basic_authentication_enabled = var.instance.webdeploy_publish_basic_authentication_enabled
   zip_deploy_file                                = var.instance.zip_deploy_file
   virtual_network_backup_restore_enabled         = var.instance.virtual_network_backup_restore_enabled
@@ -577,6 +578,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
   public_network_access_enabled                  = each.value.public_network_access_enabled
   key_vault_reference_identity_id                = each.value.key_vault_reference_identity_id
   virtual_network_subnet_id                      = each.value.virtual_network_subnet_id
+  vnet_image_pull_enabled                        = each.value.vnet_image_pull_enabled
   webdeploy_publish_basic_authentication_enabled = each.value.webdeploy_publish_basic_authentication_enabled
   zip_deploy_file                                = each.value.zip_deploy_file
   virtual_network_backup_restore_enabled         = each.value.virtual_network_backup_restore_enabled
@@ -1130,6 +1132,7 @@ resource "azurerm_windows_web_app" "windows" {
   public_network_access_enabled                  = var.instance.public_network_access_enabled
   key_vault_reference_identity_id                = var.instance.key_vault_reference_identity_id
   virtual_network_subnet_id                      = var.instance.virtual_network_subnet_id
+  virtual_network_image_pull_enabled             = var.instance.virtual_network_image_pull_enabled
   webdeploy_publish_basic_authentication_enabled = var.instance.webdeploy_publish_basic_authentication_enabled
   zip_deploy_file                                = var.instance.zip_deploy_file
   virtual_network_backup_restore_enabled         = var.instance.virtual_network_backup_restore_enabled
@@ -1724,6 +1727,7 @@ resource "azurerm_windows_web_app_slot" "windows" {
   public_network_access_enabled                  = each.value.public_network_access_enabled
   key_vault_reference_identity_id                = each.value.key_vault_reference_identity_id
   virtual_network_subnet_id                      = each.value.virtual_network_subnet_id
+  virtual_network_image_pull_enabled             = each.value.virtual_network_image_pull_enabled
   webdeploy_publish_basic_authentication_enabled = each.value.webdeploy_publish_basic_authentication_enabled
   zip_deploy_file                                = each.value.zip_deploy_file
   service_plan_id                                = each.value.service_plan_id
