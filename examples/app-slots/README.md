@@ -1,0 +1,1 @@
+This deploys webapp slots
