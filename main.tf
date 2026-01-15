@@ -364,7 +364,7 @@ resource "azurerm_linux_web_app" "linux" {
       }
 
       dynamic "custom_oidc_v2" {
-        for_each = auth_settings_v2.value.custom_oidc_v2 != null ? [auth_settings_v2.value.custom_oidc_v2] : []
+        for_each = auth_settings_v2.value.custom_oidc_v2 != null ? auth_settings_v2.value.custom_oidc_v2 : {}
 
         content {
           name                          = custom_oidc_v2.value.name
@@ -916,7 +916,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
       }
 
       dynamic "custom_oidc_v2" {
-        for_each = auth_settings_v2.value.custom_oidc_v2 != null ? [auth_settings_v2.value.custom_oidc_v2] : []
+        for_each = auth_settings_v2.value.custom_oidc_v2 != null ? auth_settings_v2.value.custom_oidc_v2 : {}
 
         content {
           name                          = custom_oidc_v2.value.name
@@ -1511,7 +1511,7 @@ resource "azurerm_windows_web_app" "windows" {
       }
 
       dynamic "custom_oidc_v2" {
-        for_each = auth_settings_v2.value.custom_oidc_v2 != null ? [auth_settings_v2.value.custom_oidc_v2] : []
+        for_each = auth_settings_v2.value.custom_oidc_v2 != null ? auth_settings_v2.value.custom_oidc_v2 : {}
 
         content {
           name                          = custom_oidc_v2.value.name
@@ -2111,7 +2111,7 @@ resource "azurerm_windows_web_app_slot" "windows" {
       }
 
       dynamic "custom_oidc_v2" {
-        for_each = auth_settings_v2.value.custom_oidc_v2 != null ? [auth_settings_v2.value.custom_oidc_v2] : []
+        for_each = auth_settings_v2.value.custom_oidc_v2 != null ? auth_settings_v2.value.custom_oidc_v2 : {}
 
         content {
           name                          = custom_oidc_v2.value.name
