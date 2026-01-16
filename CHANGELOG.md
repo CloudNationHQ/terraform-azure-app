@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.2.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v5.1.0...v5.2.0) (2026-01-16)
+
+
+### Features
+
+* add vnet image pull enabled options for linux and windows web apps ([#61](https://github.com/CloudNationHQ/terraform-azure-app/issues/61)) ([684aae5](https://github.com/CloudNationHQ/terraform-azure-app/commit/684aae524485a9956bdc6c1efd8ade7645965636))
+
 ## [5.1.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v5.0.0...v5.1.0) (2026-01-15)
 
 
