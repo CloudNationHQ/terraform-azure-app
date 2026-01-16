@@ -260,7 +260,7 @@ variable "instance" {
         token_endpoint                = optional(string)
         issuer_endpoint               = optional(string)
         certification_uri             = optional(string)
-      })), {})
+      })), null)
       facebook_v2 = optional(object({
         app_id                  = string
         app_secret_setting_name = string
@@ -603,7 +603,7 @@ variable "instance" {
           token_endpoint                = optional(string)
           issuer_endpoint               = optional(string)
           certification_uri             = optional(string)
-        })), {})
+        })), null)
         facebook_v2 = optional(object({
           app_id                  = string
           app_secret_setting_name = string
