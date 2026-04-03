@@ -1,5 +1,16 @@
 # Changelog
 
+## [6.0.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v5.3.0...v6.0.0) (2026-04-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* this change causes recreates
+
+### Features
+
+* small refactor ([#72](https://github.com/CloudNationHQ/terraform-azure-app/issues/72)) ([231ae26](https://github.com/CloudNationHQ/terraform-azure-app/commit/231ae2631ad0ab5f3f7f25f9a39d2990a336ac49))
+
 ## [5.3.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v5.2.0...v5.3.0) (2026-03-16)
 
 
