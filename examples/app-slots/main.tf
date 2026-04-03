@@ -57,14 +57,14 @@ module "storage2" {
 
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   resource_group_name = module.rg.groups.demo.name
   location            = module.rg.groups.demo.location
 
   instance = {
     type            = "linux"
-    name            = "app-demo-dev-xaesq"
+    name            = module.naming.app_service.name_unique
     service_plan_id = module.appservice.plans.web.id
     slots           = local.slots
 

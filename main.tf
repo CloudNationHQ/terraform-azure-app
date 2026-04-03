@@ -1,7 +1,7 @@
 # linux web app
-resource "azurerm_linux_web_app" "linux" {
+resource "azurerm_linux_web_app" "this" {
   for_each = var.instance.type == "linux" ? {
-    (var.instance.name) = var.instance
+    "app" = true
   } : {}
 
   resource_group_name = coalesce(
@@ -65,7 +65,7 @@ resource "azurerm_linux_web_app" "linux" {
     remote_debugging_version                      = var.instance.site_config.remote_debugging_version
 
     dynamic "application_stack" {
-      for_each = each.value.site_config.application_stack != null ? [each.value.site_config.application_stack] : []
+      for_each = var.instance.site_config.application_stack != null ? [var.instance.site_config.application_stack] : []
 
       content {
         docker_image_name        = application_stack.value.docker_image_name
@@ -85,7 +85,7 @@ resource "azurerm_linux_web_app" "linux" {
     }
 
     dynamic "auto_heal_setting" {
-      for_each = each.value.site_config.auto_heal_setting != null ? [each.value.site_config.auto_heal_setting] : []
+      for_each = var.instance.site_config.auto_heal_setting != null ? [var.instance.site_config.auto_heal_setting] : []
 
       content {
         dynamic "action" {
@@ -119,6 +119,7 @@ resource "azurerm_linux_web_app" "linux" {
                 time_taken = slow_request.value.time_taken
               }
             }
+
             dynamic "slow_request_with_path" {
               for_each = trigger.value.slow_request_with_path != null ? [trigger.value.slow_request_with_path] : []
 
@@ -148,7 +149,7 @@ resource "azurerm_linux_web_app" "linux" {
     }
 
     dynamic "cors" {
-      for_each = each.value.site_config.cors != null ? [each.value.site_config.cors] : []
+      for_each = var.instance.site_config.cors != null ? [var.instance.site_config.cors] : []
 
       content {
         allowed_origins     = cors.value.allowed_origins
@@ -158,7 +159,7 @@ resource "azurerm_linux_web_app" "linux" {
 
     dynamic "ip_restriction" {
       for_each = lookup(
-        each.value.site_config, "ip_restrictions", {}
+        var.instance.site_config, "ip_restrictions", {}
       )
 
       content {
@@ -185,7 +186,7 @@ resource "azurerm_linux_web_app" "linux" {
 
     dynamic "scm_ip_restriction" {
       for_each = lookup(
-        each.value.site_config, "scm_ip_restrictions", {}
+        var.instance.site_config, "scm_ip_restrictions", {}
       )
 
       content {
@@ -212,7 +213,7 @@ resource "azurerm_linux_web_app" "linux" {
   }
 
   dynamic "auth_settings" {
-    for_each = each.value.auth_settings != null ? [each.value.auth_settings] : []
+    for_each = var.instance.auth_settings != null ? [var.instance.auth_settings] : []
 
     content {
       enabled                        = auth_settings.value.enabled
@@ -293,7 +294,7 @@ resource "azurerm_linux_web_app" "linux" {
   }
 
   dynamic "auth_settings_v2" {
-    for_each = each.value.auth_settings_v2 != null ? [each.value.auth_settings_v2] : []
+    for_each = var.instance.auth_settings_v2 != null ? [var.instance.auth_settings_v2] : []
 
     content {
       auth_enabled                            = auth_settings_v2.value.auth_enabled
@@ -437,7 +438,7 @@ resource "azurerm_linux_web_app" "linux" {
   }
 
   dynamic "backup" {
-    for_each = each.value.backup != null ? [each.value.backup] : []
+    for_each = var.instance.backup != null ? [var.instance.backup] : []
 
     content {
       enabled             = backup.value.enabled
@@ -460,7 +461,7 @@ resource "azurerm_linux_web_app" "linux" {
 
   dynamic "connection_string" {
     for_each = lookup(
-      each.value, "connection_strings", {}
+      var.instance, "connection_strings", {}
     )
 
     content {
@@ -471,7 +472,7 @@ resource "azurerm_linux_web_app" "linux" {
   }
 
   dynamic "identity" {
-    for_each = each.value.identity != null ? [each.value.identity] : []
+    for_each = var.instance.identity != null ? [var.instance.identity] : []
 
     content {
       type         = identity.value.type
@@ -480,7 +481,7 @@ resource "azurerm_linux_web_app" "linux" {
   }
 
   dynamic "logs" {
-    for_each = each.value.logs != null ? [each.value.logs] : []
+    for_each = var.instance.logs != null ? [var.instance.logs] : []
 
     content {
       detailed_error_messages = logs.value.detailed_error_messages
@@ -505,7 +506,7 @@ resource "azurerm_linux_web_app" "linux" {
       }
 
       dynamic "http_logs" {
-        for_each = each.value.logs.http_logs != null ? [each.value.logs.http_logs] : []
+        for_each = logs.value.http_logs != null ? [logs.value.http_logs] : []
 
         content {
           dynamic "azure_blob_storage" {
@@ -532,7 +533,7 @@ resource "azurerm_linux_web_app" "linux" {
 
   dynamic "storage_account" {
     for_each = lookup(
-      each.value, "storage_accounts", {}
+      var.instance, "storage_accounts", {}
     )
 
     content {
@@ -549,7 +550,7 @@ resource "azurerm_linux_web_app" "linux" {
   }
 
   dynamic "sticky_settings" {
-    for_each = each.value.sticky_settings != null ? [each.value.sticky_settings] : []
+    for_each = var.instance.sticky_settings != null ? [var.instance.sticky_settings] : []
 
     content {
       app_setting_names       = sticky_settings.value.app_setting_names
@@ -559,14 +560,14 @@ resource "azurerm_linux_web_app" "linux" {
 }
 
 # linux web app slot
-resource "azurerm_linux_web_app_slot" "linux" {
+resource "azurerm_linux_web_app_slot" "this" {
   for_each = var.instance.type == "linux" ? (var.instance.slots != null ? var.instance.slots : {}) : {}
 
   name = try(
     each.value.name, each.key
   )
 
-  app_service_id                                 = azurerm_linux_web_app.linux[var.instance.name].id
+  app_service_id                                 = azurerm_linux_web_app.this["app"].id
   app_settings                                   = each.value.app_settings
   client_affinity_enabled                        = each.value.client_affinity_enabled
   client_certificate_enabled                     = each.value.client_certificate_enabled
@@ -682,6 +683,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
                 path       = slow_request_with_path.value.path
               }
             }
+
             dynamic "status_code" {
               for_each = trigger.value.status_code != null ? [trigger.value.status_code] : []
 
@@ -931,7 +933,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
           token_endpoint                = custom_oidc_v2.value.token_endpoint
           issuer_endpoint               = custom_oidc_v2.value.issuer_endpoint
           certification_uri             = custom_oidc_v2.value.certification_uri
-          client_secret_setting_name    = try(custom_oidc_v2.value.client_secret_setting_name, "${custom_oidc_v2.value.name}_PROVIDER_AUTHENTICATION_SECRET")
+          client_secret_setting_name    = custom_oidc_v2.value.client_secret_setting_name
         }
       }
 
@@ -1058,7 +1060,7 @@ resource "azurerm_linux_web_app_slot" "linux" {
       }
 
       dynamic "http_logs" {
-        for_each = each.value.logs.http_logs != null ? [each.value.logs.http_logs] : []
+        for_each = logs.value.http_logs != null ? [logs.value.http_logs] : []
 
         content {
           dynamic "azure_blob_storage" {
@@ -1103,9 +1105,9 @@ resource "azurerm_linux_web_app_slot" "linux" {
 }
 
 # windows web app
-resource "azurerm_windows_web_app" "windows" {
+resource "azurerm_windows_web_app" "this" {
   for_each = var.instance.type == "windows" ? {
-    (var.instance.name) = var.instance
+    "app" = true
   } : {}
 
   resource_group_name = coalesce(
@@ -1169,7 +1171,7 @@ resource "azurerm_windows_web_app" "windows" {
     scm_minimum_tls_version                       = var.instance.site_config.scm_minimum_tls_version
 
     dynamic "application_stack" {
-      for_each = each.value.site_config.application_stack != null ? [each.value.site_config.application_stack] : []
+      for_each = var.instance.site_config.application_stack != null ? [var.instance.site_config.application_stack] : []
 
       content {
         current_stack                = application_stack.value.current_stack
@@ -1189,7 +1191,7 @@ resource "azurerm_windows_web_app" "windows" {
     }
 
     dynamic "auto_heal_setting" {
-      for_each = each.value.site_config.auto_heal_setting != null ? [each.value.site_config.auto_heal_setting] : []
+      for_each = var.instance.site_config.auto_heal_setting != null ? [var.instance.site_config.auto_heal_setting] : []
 
       content {
         dynamic "action" {
@@ -1262,7 +1264,7 @@ resource "azurerm_windows_web_app" "windows" {
     }
 
     dynamic "cors" {
-      for_each = each.value.site_config.cors != null ? [each.value.site_config.cors] : []
+      for_each = var.instance.site_config.cors != null ? [var.instance.site_config.cors] : []
 
       content {
         allowed_origins     = cors.value.allowed_origins
@@ -1272,7 +1274,7 @@ resource "azurerm_windows_web_app" "windows" {
 
     dynamic "handler_mapping" {
       for_each = lookup(
-        each.value.site_config, "handler_mappings", {}
+        var.instance.site_config, "handler_mappings", {}
       )
 
       content {
@@ -1284,7 +1286,7 @@ resource "azurerm_windows_web_app" "windows" {
 
     dynamic "virtual_application" {
       for_each = lookup(
-        each.value.site_config, "virtual_applications", {}
+        var.instance.site_config, "virtual_applications", {}
       )
 
       content {
@@ -1307,7 +1309,7 @@ resource "azurerm_windows_web_app" "windows" {
 
     dynamic "ip_restriction" {
       for_each = lookup(
-        each.value.site_config, "ip_restrictions", {}
+        var.instance.site_config, "ip_restrictions", {}
       )
 
       content {
@@ -1334,7 +1336,7 @@ resource "azurerm_windows_web_app" "windows" {
 
     dynamic "scm_ip_restriction" {
       for_each = lookup(
-        each.value.site_config, "scm_ip_restrictions", {}
+        var.instance.site_config, "scm_ip_restrictions", {}
       )
 
       content {
@@ -1361,7 +1363,7 @@ resource "azurerm_windows_web_app" "windows" {
   }
 
   dynamic "auth_settings" {
-    for_each = each.value.auth_settings != null ? [each.value.auth_settings] : []
+    for_each = var.instance.auth_settings != null ? [var.instance.auth_settings] : []
 
     content {
       enabled                        = auth_settings.value.enabled
@@ -1442,7 +1444,7 @@ resource "azurerm_windows_web_app" "windows" {
   }
 
   dynamic "auth_settings_v2" {
-    for_each = each.value.auth_settings_v2 != null ? [each.value.auth_settings_v2] : []
+    for_each = var.instance.auth_settings_v2 != null ? [var.instance.auth_settings_v2] : []
 
     content {
       auth_enabled                            = auth_settings_v2.value.auth_enabled
@@ -1586,10 +1588,10 @@ resource "azurerm_windows_web_app" "windows" {
   }
 
   dynamic "backup" {
-    for_each = each.value.backup != null ? [each.value.backup] : []
+    for_each = var.instance.backup != null ? [var.instance.backup] : []
 
     content {
-      enabled             = try(backup.value.enabled, true)
+      enabled             = backup.value.enabled
       name                = backup.value.name
       storage_account_url = backup.value.storage_account_url
 
@@ -1609,7 +1611,7 @@ resource "azurerm_windows_web_app" "windows" {
 
   dynamic "connection_string" {
     for_each = lookup(
-      each.value, "connection_strings", {}
+      var.instance, "connection_strings", {}
     )
 
     content {
@@ -1620,7 +1622,7 @@ resource "azurerm_windows_web_app" "windows" {
   }
 
   dynamic "identity" {
-    for_each = each.value.identity != null ? [each.value.identity] : []
+    for_each = var.instance.identity != null ? [var.instance.identity] : []
 
     content {
       type         = identity.value.type
@@ -1629,7 +1631,7 @@ resource "azurerm_windows_web_app" "windows" {
   }
 
   dynamic "logs" {
-    for_each = each.value.logs != null ? [each.value.logs] : []
+    for_each = var.instance.logs != null ? [var.instance.logs] : []
 
     content {
       detailed_error_messages = logs.value.detailed_error_messages
@@ -1654,7 +1656,7 @@ resource "azurerm_windows_web_app" "windows" {
       }
 
       dynamic "http_logs" {
-        for_each = each.value.logs.http_logs != null ? [each.value.logs.http_logs] : []
+        for_each = logs.value.http_logs != null ? [logs.value.http_logs] : []
 
         content {
           dynamic "azure_blob_storage" {
@@ -1681,7 +1683,7 @@ resource "azurerm_windows_web_app" "windows" {
 
   dynamic "storage_account" {
     for_each = lookup(
-      each.value, "storage_accounts", {}
+      var.instance, "storage_accounts", {}
     )
 
     content {
@@ -1698,7 +1700,7 @@ resource "azurerm_windows_web_app" "windows" {
   }
 
   dynamic "sticky_settings" {
-    for_each = each.value.sticky_settings != null ? [each.value.sticky_settings] : []
+    for_each = var.instance.sticky_settings != null ? [var.instance.sticky_settings] : []
 
     content {
       app_setting_names       = sticky_settings.value.app_setting_names
@@ -1708,14 +1710,14 @@ resource "azurerm_windows_web_app" "windows" {
 }
 
 # windows web app slot
-resource "azurerm_windows_web_app_slot" "windows" {
+resource "azurerm_windows_web_app_slot" "this" {
   for_each = var.instance.type == "windows" ? (var.instance.slots != null ? var.instance.slots : {}) : {}
 
   name = try(
     each.value.name, each.key
   )
 
-  app_service_id                                 = azurerm_windows_web_app.windows[var.instance.name].id
+  app_service_id                                 = azurerm_windows_web_app.this["app"].id
   app_settings                                   = each.value.app_settings
   client_affinity_enabled                        = each.value.client_affinity_enabled
   client_certificate_enabled                     = each.value.client_certificate_enabled
@@ -2255,7 +2257,7 @@ resource "azurerm_windows_web_app_slot" "windows" {
       }
 
       dynamic "http_logs" {
-        for_each = each.value.logs.http_logs != null ? [each.value.logs.http_logs] : []
+        for_each = logs.value.http_logs != null ? [logs.value.http_logs] : []
 
         content {
           dynamic "azure_blob_storage" {

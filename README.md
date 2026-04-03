@@ -33,10 +33,10 @@ The following providers are used by this module:
 
 The following resources are used by this module:
 
-- [azurerm_linux_web_app.linux](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app) (resource)
-- [azurerm_linux_web_app_slot.linux](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app_slot) (resource)
-- [azurerm_windows_web_app.windows](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_web_app) (resource)
-- [azurerm_windows_web_app_slot.windows](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_web_app_slot) (resource)
+- [azurerm_linux_web_app.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app) (resource)
+- [azurerm_linux_web_app_slot.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app_slot) (resource)
+- [azurerm_windows_web_app.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_web_app) (resource)
+- [azurerm_windows_web_app_slot.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_web_app_slot) (resource)
 
 ## Required Inputs
 
@@ -66,6 +66,8 @@ object({
     public_network_access_enabled                  = optional(bool, true)
     key_vault_reference_identity_id                = optional(string)
     virtual_network_subnet_id                      = optional(string)
+    vnet_image_pull_enabled                        = optional(bool, false)
+    virtual_network_image_pull_enabled             = optional(bool, false)
     webdeploy_publish_basic_authentication_enabled = optional(bool, true)
     zip_deploy_file                                = optional(string)
     virtual_network_backup_restore_enabled         = optional(bool, false)
@@ -124,6 +126,10 @@ object({
         action = object({
           action_type                    = string
           minimum_process_execution_time = optional(string)
+          custom_action = optional(object({
+            executable = string
+            parameters = optional(string)
+          }), null)
         })
         trigger = object({
           private_memory_kb = optional(number)
@@ -401,6 +407,8 @@ object({
       public_network_access_enabled                  = optional(bool, true)
       key_vault_reference_identity_id                = optional(string)
       virtual_network_subnet_id                      = optional(string)
+      vnet_image_pull_enabled                        = optional(bool, false)
+      virtual_network_image_pull_enabled             = optional(bool, false)
       webdeploy_publish_basic_authentication_enabled = optional(bool, true)
       zip_deploy_file                                = optional(string)
       virtual_network_backup_restore_enabled         = optional(bool, false)
