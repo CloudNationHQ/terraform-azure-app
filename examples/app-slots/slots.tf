@@ -6,24 +6,23 @@ locals {
         type = "SystemAssigned"
       }
       site_config = {
-        always_on                        = false
-        http2_enabled                    = true
-        app_command_line                 = ""
-        pre_warmed_instance_count        = 1
-        runtime_scale_monitoring_enabled = false
-        scm_use_main_ip_restriction      = false
-        minimum_tls_version              = "1.2"
-        remote_debugging_enabled         = true
-        use_32_bit_worker                = true
-        websockets_enabled               = true
+        always_on                   = false
+        http2_enabled               = true
+        app_command_line            = ""
+        worker_count                = 1
+        scm_use_main_ip_restriction = false
+        minimum_tls_version         = "1.2"
+        remote_debugging_enabled    = true
+        use_32_bit_worker           = true
+        websockets_enabled          = true
         application_stack = {
           docker_image_name   = "node:latest"
           docker_registry_url = "https://index.docker.io"
         }
         auto_heal_setting = {
           action = {
-            action_type                = "Recycle"
-            min_process_execution_time = "00:00:30"
+            action_type                    = "Recycle"
+            minimum_process_execution_time = "00:00:30"
           }
           trigger = {
             requests = {
@@ -71,24 +70,23 @@ locals {
         type = "SystemAssigned"
       }
       site_config = {
-        always_on                        = false
-        http2_enabled                    = true
-        app_command_line                 = ""
-        pre_warmed_instance_count        = 2
-        runtime_scale_monitoring_enabled = true
-        scm_use_main_ip_restriction      = true
-        minimum_tls_version              = "1.2"
-        remote_debugging_enabled         = false
-        use_32_bit_worker                = false
-        websockets_enabled               = true
+        always_on                   = false
+        http2_enabled               = true
+        app_command_line            = ""
+        worker_count                = 2
+        scm_use_main_ip_restriction = true
+        minimum_tls_version         = "1.2"
+        remote_debugging_enabled    = false
+        use_32_bit_worker           = false
+        websockets_enabled          = true
         application_stack = {
           docker_image_name   = "node:latest"
           docker_registry_url = "https://index.docker.io"
         }
         auto_heal_setting = {
           action = {
-            action_type                = "Recycle"
-            min_process_execution_time = "00:00:30"
+            action_type                    = "Recycle"
+            minimum_process_execution_time = "00:00:30"
           }
           trigger = {
             requests = {

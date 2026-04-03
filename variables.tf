@@ -77,6 +77,10 @@ variable "instance" {
         action = object({
           action_type                    = string
           minimum_process_execution_time = optional(string)
+          custom_action = optional(object({
+            executable = string
+            parameters = optional(string)
+          }), null)
         })
         trigger = object({
           private_memory_kb = optional(number)
