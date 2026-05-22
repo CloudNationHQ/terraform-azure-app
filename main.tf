@@ -63,6 +63,7 @@ resource "azurerm_linux_web_app" "this" {
     worker_count                                  = var.instance.site_config.worker_count
     scm_minimum_tls_version                       = var.instance.site_config.scm_minimum_tls_version
     remote_debugging_version                      = var.instance.site_config.remote_debugging_version
+    minimum_tls_cipher_suite                      = var.instance.site_config.minimum_tls_cipher_suite
 
     dynamic "application_stack" {
       for_each = var.instance.site_config.application_stack != null ? [var.instance.site_config.application_stack] : []
@@ -615,6 +616,7 @@ resource "azurerm_linux_web_app_slot" "this" {
     worker_count                                  = each.value.site_config.worker_count
     remote_debugging_version                      = each.value.site_config.remote_debugging_version
     scm_minimum_tls_version                       = each.value.site_config.scm_minimum_tls_version
+    minimum_tls_cipher_suite                      = each.value.site_config.minimum_tls_cipher_suite
     auto_swap_slot_name                           = each.value.site_config.auto_swap_slot_name
 
     dynamic "application_stack" {
@@ -1169,6 +1171,7 @@ resource "azurerm_windows_web_app" "this" {
     worker_count                                  = var.instance.site_config.worker_count
     remote_debugging_version                      = var.instance.site_config.remote_debugging_version
     scm_minimum_tls_version                       = var.instance.site_config.scm_minimum_tls_version
+    minimum_tls_cipher_suite                      = var.instance.site_config.minimum_tls_cipher_suite
 
     dynamic "application_stack" {
       for_each = var.instance.site_config.application_stack != null ? [var.instance.site_config.application_stack] : []
@@ -1766,6 +1769,7 @@ resource "azurerm_windows_web_app_slot" "this" {
     auto_swap_slot_name                           = each.value.site_config.auto_swap_slot_name
     remote_debugging_version                      = each.value.site_config.remote_debugging_version
     scm_minimum_tls_version                       = each.value.site_config.scm_minimum_tls_version
+    minimum_tls_cipher_suite                      = each.value.site_config.minimum_tls_cipher_suite
 
     dynamic "virtual_application" {
       for_each = lookup(

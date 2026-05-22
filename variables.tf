@@ -53,6 +53,7 @@ variable "instance" {
       worker_count                                  = optional(number)
       scm_minimum_tls_version                       = optional(string, "1.2")
       remote_debugging_version                      = optional(string)
+      minimum_tls_cipher_suite                      = optional(string)
       application_stack = optional(object({
         docker_image_name            = optional(string)
         docker_registry_url          = optional(string)
@@ -395,6 +396,7 @@ variable "instance" {
         worker_count                                  = optional(number)
         remote_debugging_version                      = optional(string)
         scm_minimum_tls_version                       = optional(string, "1.2")
+        minimum_tls_cipher_suite                      = optional(string)
         auto_swap_slot_name                           = optional(string)
         application_stack = optional(object({
           docker_image_name            = optional(string)

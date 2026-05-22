@@ -74,6 +74,7 @@ module "webapp" {
     name                      = module.naming.app_service.name_unique
     service_plan_id           = module.appservice.plans.web.id
     virtual_network_subnet_id = module.network.subnets.sn1.id
+    https_only                = true
 
     site_config = {
       websockets_enabled     = true
