@@ -110,7 +110,6 @@ module "webapp" {
     name                          = module.naming.app_service.name_unique
     service_plan_id               = module.appservice.plans.web.id
     public_network_access_enabled = false
-    https_only                    = true
 
     site_config = {}
   }

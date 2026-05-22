@@ -1,8 +1,7 @@
 locals {
   slots = {
     dev = {
-      name       = "development"
-      https_only = true
+      name = "development"
       identity = {
         type = "SystemAssigned"
       }
@@ -66,8 +65,7 @@ locals {
       }
     }
     staging = {
-      name       = "staging"
-      https_only = true
+      name = "staging"
       identity = {
         type = "SystemAssigned"
       }
