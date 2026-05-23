@@ -44,7 +44,6 @@ module "webapp" {
     type            = "linux"
     name            = module.naming.app_service.name_unique
     service_plan_id = module.appservice.plans.web.id
-    https_only      = true
     site_config     = {}
   }
 }
