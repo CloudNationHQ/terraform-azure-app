@@ -54,6 +54,7 @@ resource "azurerm_linux_web_app" "this" {
     local_mysql_enabled                           = var.instance.site_config.local_mysql_enabled
     managed_pipeline_mode                         = var.instance.site_config.managed_pipeline_mode
     minimum_tls_version                           = var.instance.site_config.minimum_tls_version
+    minimum_tls_cipher_suite                      = var.instance.site_config.minimum_tls_cipher_suite
     remote_debugging_enabled                      = var.instance.site_config.remote_debugging_enabled
     scm_ip_restriction_default_action             = var.instance.site_config.scm_ip_restriction_default_action
     scm_use_main_ip_restriction                   = var.instance.site_config.scm_use_main_ip_restriction
@@ -606,6 +607,7 @@ resource "azurerm_linux_web_app_slot" "this" {
     local_mysql_enabled                           = each.value.site_config.local_mysql_enabled
     managed_pipeline_mode                         = each.value.site_config.managed_pipeline_mode
     minimum_tls_version                           = each.value.site_config.minimum_tls_version
+    minimum_tls_cipher_suite                      = each.value.site_config.minimum_tls_cipher_suite
     remote_debugging_enabled                      = each.value.site_config.remote_debugging_enabled
     scm_ip_restriction_default_action             = each.value.site_config.scm_ip_restriction_default_action
     scm_use_main_ip_restriction                   = each.value.site_config.scm_use_main_ip_restriction
@@ -1160,6 +1162,7 @@ resource "azurerm_windows_web_app" "this" {
     local_mysql_enabled                           = var.instance.site_config.local_mysql_enabled
     managed_pipeline_mode                         = var.instance.site_config.managed_pipeline_mode
     minimum_tls_version                           = var.instance.site_config.minimum_tls_version
+    minimum_tls_cipher_suite                      = var.instance.site_config.minimum_tls_cipher_suite
     remote_debugging_enabled                      = var.instance.site_config.remote_debugging_enabled
     scm_ip_restriction_default_action             = var.instance.site_config.scm_ip_restriction_default_action
     scm_use_main_ip_restriction                   = var.instance.site_config.scm_use_main_ip_restriction
@@ -1756,6 +1759,7 @@ resource "azurerm_windows_web_app_slot" "this" {
     local_mysql_enabled                           = each.value.site_config.local_mysql_enabled
     managed_pipeline_mode                         = each.value.site_config.managed_pipeline_mode
     minimum_tls_version                           = each.value.site_config.minimum_tls_version
+    minimum_tls_cipher_suite                      = each.value.site_config.minimum_tls_cipher_suite
     remote_debugging_enabled                      = each.value.site_config.remote_debugging_enabled
     scm_ip_restriction_default_action             = each.value.site_config.scm_ip_restriction_default_action
     scm_use_main_ip_restriction                   = each.value.site_config.scm_use_main_ip_restriction
