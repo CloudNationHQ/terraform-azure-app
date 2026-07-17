@@ -1,6 +1,6 @@
 output "instance" {
   description = "contains all web app configuration"
-  value       = var.instance.type == "linux" ? try(azurerm_linux_web_app.this["app"], null) : try(azurerm_windows_web_app.this["app"], null)
+  value       = var.instance.type == "linux" ? azurerm_linux_web_app.this["app"] : azurerm_windows_web_app.this["app"]
 }
 
 output "slots" {
