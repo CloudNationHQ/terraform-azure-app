@@ -1,13 +1,13 @@
 module "naming" {
   source  = "cloudnationhq/naming/azure"
-  version = "~> 0.24"
+  version = "~> 0.32"
 
   suffix = ["demo", "dev"]
 }
 
 module "rg" {
   source  = "cloudnationhq/rg/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   groups = {
     demo = {
@@ -19,7 +19,7 @@ module "rg" {
 
 module "appservice" {
   source  = "cloudnationhq/plan/azure"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   resource_group_name = module.rg.groups.demo.name
   location            = module.rg.groups.demo.location
@@ -35,18 +35,17 @@ module "appservice" {
 
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 6.0"
+  version = "~> 7.0"
 
   resource_group_name = module.rg.groups.demo.name
   location            = module.rg.groups.demo.location
 
-  instance = {
+  web_app = {
     type            = "windows"
     name            = module.naming.app_service.name_unique
     service_plan_id = module.appservice.plans.web.id
     site_config = {
-      http2_enabled     = true
-      application_stack = {}
+      http2_enabled = true
       handler_mappings = {
         php = {
           extension             = "*.php"
