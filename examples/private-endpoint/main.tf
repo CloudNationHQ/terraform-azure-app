@@ -1,13 +1,13 @@
 module "naming" {
   source  = "cloudnationhq/naming/azure"
-  version = "~> 0.24"
+  version = "~> 0.32"
 
   suffix = ["demo", "dev"]
 }
 
 module "rg" {
   source  = "cloudnationhq/rg/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   groups = {
     demo = {
@@ -19,9 +19,8 @@ module "rg" {
 
 module "network" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 9.0"
+  version = "~> 10.0"
 
-  naming = local.naming
 
   vnet = {
     name                = module.naming.virtual_network.name
@@ -39,7 +38,7 @@ module "network" {
 
 module "private_dns" {
   source  = "cloudnationhq/pdns/azure"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   resource_group_name = module.rg.groups.demo.name
 
@@ -60,7 +59,7 @@ module "private_dns" {
 
 module "privatelink" {
   source  = "cloudnationhq/pe/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   resource_group_name = module.rg.groups.demo.name
   location            = module.rg.groups.demo.location
@@ -75,7 +74,7 @@ module "privatelink" {
       }
 
       private_service_connection = {
-        private_connection_resource_id = module.webapp.instance.id
+        private_connection_resource_id = module.webapp.web_app.id
         subresource_names              = ["sites"]
       }
     }
@@ -84,7 +83,7 @@ module "privatelink" {
 
 module "appservice" {
   source  = "cloudnationhq/plan/azure"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   resource_group_name = module.rg.groups.demo.name
   location            = module.rg.groups.demo.location
@@ -100,12 +99,12 @@ module "appservice" {
 
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 6.0"
+  version = "~> 7.0"
 
   resource_group_name = module.rg.groups.demo.name
   location            = module.rg.groups.demo.location
 
-  instance = {
+  web_app = {
     type                          = "linux"
     name                          = module.naming.app_service.name_unique
     service_plan_id               = module.appservice.plans.web.id

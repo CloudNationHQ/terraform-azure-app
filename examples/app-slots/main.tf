@@ -1,13 +1,13 @@
 module "naming" {
   source  = "cloudnationhq/naming/azure"
-  version = "~> 0.24"
+  version = "~> 0.32"
 
   suffix = ["demo", "dev"]
 }
 
 module "rg" {
   source  = "cloudnationhq/rg/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   groups = {
     demo = {
@@ -19,7 +19,7 @@ module "rg" {
 
 module "appservice" {
   source  = "cloudnationhq/plan/azure"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   resource_group_name = module.rg.groups.demo.name
   location            = module.rg.groups.demo.location
@@ -35,7 +35,7 @@ module "appservice" {
 
 module "storage1" {
   source  = "cloudnationhq/sa/azure"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   storage = {
     name                = "${module.naming.storage_account.name_unique}1"
@@ -46,7 +46,7 @@ module "storage1" {
 
 module "storage2" {
   source  = "cloudnationhq/sa/azure"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   storage = {
     name                = "${module.naming.storage_account.name_unique}2"
@@ -57,12 +57,12 @@ module "storage2" {
 
 module "webapp" {
   source  = "cloudnationhq/app/azure"
-  version = "~> 6.0"
+  version = "~> 7.0"
 
   resource_group_name = module.rg.groups.demo.name
   location            = module.rg.groups.demo.location
 
-  instance = {
+  web_app = {
     type            = "linux"
     name            = module.naming.app_service.name_unique
     service_plan_id = module.appservice.plans.web.id
@@ -90,6 +90,35 @@ module "webapp" {
           requests = {
             count    = 3
             interval = "00:01:00"
+          }
+
+          status_code = {
+            server_errors = {
+              count             = 10
+              interval          = "00:01:00"
+              status_code_range = "500-599"
+            }
+            not_found = {
+              count             = 25
+              interval          = "00:05:00"
+              status_code_range = "404"
+              path              = "/api/health"
+            }
+          }
+
+          slow_request_with_path = {
+            api = {
+              count      = 5
+              interval   = "00:01:00"
+              time_taken = "00:00:30"
+              path       = "/api"
+            }
+            reports = {
+              count      = 3
+              interval   = "00:05:00"
+              time_taken = "00:01:00"
+              path       = "/reports"
+            }
           }
         }
       }
