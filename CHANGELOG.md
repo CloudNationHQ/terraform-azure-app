@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.1.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v7.0.0...v7.1.0) (2026-10-20)
+
+
+### Features
+
+* **deps:** bump github.com/klauspost/compress in /tests ([#87](https://github.com/CloudNationHQ/terraform-azure-app/issues/87)) ([46fb53a](https://github.com/CloudNationHQ/terraform-azure-app/commit/46fb53af377af2943ae07d6534c6e505dbd97704))
+
 ## [7.0.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v6.1.0...v7.0.0) (2026-09-10)
 
 
