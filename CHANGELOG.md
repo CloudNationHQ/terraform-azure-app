@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.1.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v7.0.0...v7.1.0) (2026-11-11)
+
+
+### Features
+
+* add end_to_end_tls_encryption_enabled to web apps and slots ([#89](https://github.com/CloudNationHQ/terraform-azure-app/issues/89)) ([96c4fb1](https://github.com/CloudNationHQ/terraform-azure-app/commit/96c4fb12e3150f7f740725037a2d8c51f06590ff))
+* **deps:** bump github.com/klauspost/compress in /tests ([#87](https://github.com/CloudNationHQ/terraform-azure-app/issues/87)) ([46fb53a](https://github.com/CloudNationHQ/terraform-azure-app/commit/46fb53af377af2943ae07d6534c6e505dbd97704))
+
 ## [7.0.0](https://github.com/CloudNationHQ/terraform-azure-app/compare/v6.1.0...v7.0.0) (2026-09-10)
 
 
