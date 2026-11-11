@@ -23,6 +23,7 @@ resource "azurerm_linux_web_app" "this" {
   ftp_publish_basic_authentication_enabled       = var.web_app.ftp_publish_basic_authentication_enabled
   https_only                                     = var.web_app.https_only
   public_network_access_enabled                  = var.web_app.public_network_access_enabled
+  end_to_end_tls_encryption_enabled              = var.web_app.end_to_end_tls_encryption_enabled
   key_vault_reference_identity_id                = var.web_app.key_vault_reference_identity_id
   virtual_network_subnet_id                      = var.web_app.virtual_network_subnet_id
   vnet_image_pull_enabled                        = var.web_app.virtual_network_image_pull_enabled
@@ -566,6 +567,7 @@ resource "azurerm_linux_web_app_slot" "this" {
   ftp_publish_basic_authentication_enabled       = each.value.ftp_publish_basic_authentication_enabled
   https_only                                     = each.value.https_only
   public_network_access_enabled                  = each.value.public_network_access_enabled
+  end_to_end_tls_encryption_enabled              = each.value.end_to_end_tls_encryption_enabled
   key_vault_reference_identity_id                = each.value.key_vault_reference_identity_id
   virtual_network_subnet_id                      = each.value.virtual_network_subnet_id
   vnet_image_pull_enabled                        = each.value.virtual_network_image_pull_enabled
@@ -1110,6 +1112,7 @@ resource "azurerm_windows_web_app" "this" {
   ftp_publish_basic_authentication_enabled       = var.web_app.ftp_publish_basic_authentication_enabled
   https_only                                     = var.web_app.https_only
   public_network_access_enabled                  = var.web_app.public_network_access_enabled
+  end_to_end_tls_encryption_enabled              = var.web_app.end_to_end_tls_encryption_enabled
   key_vault_reference_identity_id                = var.web_app.key_vault_reference_identity_id
   virtual_network_subnet_id                      = var.web_app.virtual_network_subnet_id
   virtual_network_image_pull_enabled             = var.web_app.virtual_network_image_pull_enabled
@@ -1692,6 +1695,7 @@ resource "azurerm_windows_web_app_slot" "this" {
   ftp_publish_basic_authentication_enabled       = each.value.ftp_publish_basic_authentication_enabled
   https_only                                     = each.value.https_only
   public_network_access_enabled                  = each.value.public_network_access_enabled
+  end_to_end_tls_encryption_enabled              = each.value.end_to_end_tls_encryption_enabled
   key_vault_reference_identity_id                = each.value.key_vault_reference_identity_id
   virtual_network_subnet_id                      = each.value.virtual_network_subnet_id
   virtual_network_image_pull_enabled             = each.value.virtual_network_image_pull_enabled
